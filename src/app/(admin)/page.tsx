@@ -1,42 +1,69 @@
-import type { Metadata } from "next";
-import { EcommerceMetrics } from "@/components/ecommerce/EcommerceMetrics";
 import React from "react";
-import MonthlyTarget from "@/components/ecommerce/MonthlyTarget";
-import MonthlySalesChart from "@/components/ecommerce/MonthlySalesChart";
-import StatisticsChart from "@/components/ecommerce/StatisticsChart";
-import RecentOrders from "@/components/ecommerce/RecentOrders";
-import DemographicCard from "@/components/ecommerce/DemographicCard";
 
-export const metadata: Metadata = {
-  title:
-    "Next.js E-commerce Dashboard | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js Home for TailAdmin Dashboard Template",
-};
+import{ DashboardData } from "@/components/dashboard/DashboardData";
+import axios from "axios";
+import ComponentCard from "@/components/common/ComponentCard";
+import { ToppCoursesTable } from "@/components/tables/ToppCoursesTable";
+import { TopStudentsTable } from "@/components/tables/TopStudentsTable";
+import { TopInstructorsTable } from "@/components/tables/TopInstructorsTable";
+// export const metadata: Metadata = {
+//   icons:{
+//     icon: '/icon.png',
+//   },
+//   title: "AI Innovation Lab - Leading AI Development Center in the Region",
+//   description: "AI Innovation Lab is the region's biggest AI development center. We create cutting-edge AI solutions for digital health, business automation, and chatbots. Join our industry internship program.",
+// };
 
-export default function Ecommerce() {
+    
+export default async function Ecommerce() {
+  const getDashboardData = async () => {
+      const data = await axios.get('http://localhost:3001/admin/api/dashboard/get-all-dashboard-data', {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+        }
+      });
+      console.log(data.data, "dashboard data");
+  
+      return data.data;
+    }
+    const dashboardData =await getDashboardData();
+    console.log(dashboardData.topCourses,"sfdsd"); 
+   
   return (
     <div className="grid grid-cols-12 gap-4 md:gap-6">
-      <div className="col-span-12 space-y-6 xl:col-span-7">
-        <EcommerceMetrics />
+      <div className="col-span-12 ">
+       
 
-        <MonthlySalesChart />
+        <DashboardData  dashboardData = {dashboardData} />
+       
+      </div>
+      <div className="col-span-12 ">
+    
+      <div className="">
+        <ComponentCard title="Top Selling Course">
+          <ToppCoursesTable  courses={dashboardData.topCourses} />
+        </ComponentCard>
       </div>
 
-      <div className="col-span-12 xl:col-span-5">
-        <MonthlyTarget />
-      </div>
-
-      <div className="col-span-12">
-        <StatisticsChart />
-      </div>
-
-      <div className="col-span-12 xl:col-span-5">
-        <DemographicCard />
-      </div>
-
-      <div className="col-span-12 xl:col-span-7">
-        <RecentOrders />
+    </div>
+   <div className="col-span-6 ">
+      <div className="">
+        <ComponentCard title="Top Students">
+          <TopStudentsTable students={dashboardData.topStudents} />
+        </ComponentCard>
       </div>
     </div>
+      <div className="col-span-6 ">
+      <div className="">
+        <ComponentCard title="Top Students">
+          <TopInstructorsTable instructors={dashboardData.topInstructors} />
+        </ComponentCard>
+      </div>
+    </div>
+     </div>
   );
 }
+
+
+

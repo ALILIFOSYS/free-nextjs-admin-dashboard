@@ -4,7 +4,7 @@ import { useSidebar } from "@/context/SidebarContext";
 import AppHeader from "@/layout/AppHeader";
 import AppSidebar from "@/layout/AppSidebar";
 import Backdrop from "@/layout/Backdrop";
-import React from "react";
+import React, { useEffect } from "react";
 
 export default function AdminLayout({
   children,
@@ -20,6 +20,14 @@ export default function AdminLayout({
     ? "lg:ml-[290px]"
     : "lg:ml-[90px]";
 
+    useEffect(()=>{
+      const token = localStorage.getItem("AuthToken");
+      console.log(token, "token");
+      
+      if (!token) {
+        window.location.href = "/signin";
+      }
+    },[])
   return (
     <div className="min-h-screen xl:flex">
       {/* Sidebar and Backdrop */}
