@@ -22,6 +22,7 @@ interface dashboardData {
 
 }
 export const DashboardData: React.FC<{ dashboardData: dashboardData }> = ({ dashboardData }) => {
+console.log(dashboardData,"dsfds");
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6">

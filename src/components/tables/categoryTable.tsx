@@ -27,37 +27,36 @@ interface Category {
     deleted_at: string | null,
     media_src: string | null;
 }
- const scrollToTop = () => {
+const scrollToTop = () => {
     window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
+        top: 0,
+        behavior: 'smooth'
     });
-  };
+};
 
- 
-  // Show button when page is scrolled down
+
+// Show button when page is scrolled down
 
 
 export default function CategoryTable({ getCategoryData }: { getCategoryData: Category[] }) {
-      const [isVisible, setIsVisible] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
 
     const [createCategory, setCreateCategory] = useState(false);
     const [edit, setEdit] = useState<boolean>(false);
     const [editIndex, setEditIndex] = useState<number | null>(0);
-    const [render, setRender] = useState<boolean>(false);
 
 
     const router = useRouter()
 
-      const toggleVisibility = () => {
-    if (window.pageYOffset > 300) {
-      setIsVisible(true);
-    } else {
-      setIsVisible(false);
-    }
-  };
+    const toggleVisibility = () => {
+        if (window.pageYOffset > 300) {
+            setIsVisible(true);
+        } else {
+            setIsVisible(false);
+        }
+    };
     const handleCreate = () => {
-        
+
         setCreateCategory(true);
         setEdit(false)
         // Logic to handle category creation
@@ -69,7 +68,7 @@ export default function CategoryTable({ getCategoryData }: { getCategoryData: Ca
         setCreateCategory(false);
     }
     const handleEdit = (id: number) => {
-         setCreateCategory(false);
+        setCreateCategory(false);
         scrollToTop()
         console.log(id);
         setEdit(true);
@@ -98,12 +97,12 @@ export default function CategoryTable({ getCategoryData }: { getCategoryData: Ca
             console.error("Error deleting category:", error);
         }
     }
-  useEffect(() => {
-    window.addEventListener('scroll', toggleVisibility);
-    return () => window.removeEventListener('scroll', toggleVisibility);
-  }, []);
-  console.log(edit,"edit");
-  
+    useEffect(() => {
+        window.addEventListener('scroll', toggleVisibility);
+        return () => window.removeEventListener('scroll', toggleVisibility);
+    }, []);
+    console.log(edit, "edit");
+
     return (
         <>
             {createCategory && <CreateCategory CloseModal={CloseModal} />}
@@ -183,7 +182,7 @@ export default function CategoryTable({ getCategoryData }: { getCategoryData: Ca
                                                 />
                                             </div>
                                         </TableCell>
-                                        <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                        <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400" >
 
                                             {value.title}
                                         </TableCell>
