@@ -1,10 +1,10 @@
 import PageBreadcrumb from '@/components/common/PageBreadCrumb';
-import CoursesTable from '@/components/tables/CoursesTable'
+import ChapterCoursesTable from '@/components/tables/ChapterCourse';
 import axios from 'axios';
 import React from 'react'
 
 const page =async () => {
-  const getCourseDetails = async () => {
+const getCourseDetails = async () => {
       const data = await axios.get('http://localhost:3001/admin/api/courses/get-courses', {
         headers: {
           'Content-Type': 'application/json',
@@ -18,9 +18,9 @@ const page =async () => {
   
   return (
       <div>
-      <PageBreadcrumb pageTitle="Courses" />
+      <PageBreadcrumb pageTitle="Select course" />
       <div className="space-y-6">
-       <CoursesTable  data={CourseData} />
+       <ChapterCoursesTable  data={CourseData} />
       </div>
     </div>
  

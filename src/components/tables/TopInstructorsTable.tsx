@@ -25,7 +25,7 @@ interface TopInstructorsDataProps {
 
 
 export const TopInstructorsTable: React.FC<TopInstructorsDataProps> = ({ instructors }) => {
-  console.log(instructors, "courses data in basic table one");
+
 
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
