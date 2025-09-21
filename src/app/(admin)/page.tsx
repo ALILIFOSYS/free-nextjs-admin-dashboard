@@ -23,12 +23,10 @@ export default async function Ecommerce() {
           'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
         }
       });
-      console.log(data.data, "dashboard data");
   
       return data.data;
     }
     const dashboardData =await getDashboardData();
-    console.log(dashboardData.topCourses,"sfdsd"); 
    
   return (
     <div className="grid grid-cols-12 gap-4 md:gap-6">

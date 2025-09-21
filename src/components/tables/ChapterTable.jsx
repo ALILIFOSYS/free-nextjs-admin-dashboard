@@ -16,25 +16,56 @@ import axios from "axios";
 import { BaseUrl } from "@/constents/serverBaseUrl";
 import { Modal } from "../ui/modal";
 import { useModal } from "@/hooks/useModal";
+import ConfirmModal from '@/components/ui/modal/Confirmation'
 
 
 
-
-export default function ChapterTable({ data }) {
+export default function ChapterTable({ data, course_id }) {
     const [isVisible, setIsVisible] = useState(false);
 
     const [createCategory, setCreateCategory] = useState(false);
     const [edit, setEdit] = useState(false);
     const [editIndex, setEditIndex] = useState(0);
     const [openModal, setOpenModal] = useState(false)
+    const [deleteId, setDeleteId] = useState();
     const infoModal = useModal();
     const router = useRouter()
-    console.log(data, "dfsd");
 
+    const handleCreate = () => {
+        router.push(`/chapters/create/${course_id}`)
+    }
 
+    const handleDelete = (value) => {
+        setDeleteId(value)
+        setOpenModal(true)
 
+    }
+    const handleYes = async () => {
+        const deleteChapter = await axios.delete(`${BaseUrl}/chapters/delete-chapter/${deleteId}`,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+                }
+            }
+        )
+        if (deleteChapter.status === 200) {
+            setOpenModal(false)
+            router.push(`/chapters/${course_id}`)
+        } else {
+            console.log("error");
+        }
+    }
+
+    const handleNo = () => {
+        setOpenModal(false)
+    }
     return (
         <>
+            {openModal && <ConfirmModal handleYes={handleYes} handleNo={handleNo} />}
+            <div className="grid md:grid-cols-4 ">
+                <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" onClick={handleCreate}>Create Chapter</button>
+            </div>
             <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
                 <div className="max-w ">
                     <div className="">
@@ -61,8 +92,6 @@ export default function ChapterTable({ data }) {
                                     >
                                         Sequence
                                     </TableCell>
-
-
 
                                     <TableCell
                                         isHeader
@@ -124,6 +153,7 @@ export default function ChapterTable({ data }) {
                             </TableBody>
                         </Table>
                     </div>
+                    {data.length == 0 && <div className="my-5 text-center text-gray-500 text-theme-sm dark:text-gray-400">No data found</div>}
                 </div>
             </div>
         </>

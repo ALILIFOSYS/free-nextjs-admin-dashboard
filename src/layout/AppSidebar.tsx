@@ -76,11 +76,7 @@ const studentItems: NavItem[] = [
   {
     icon: <BoxCubeIcon />,
     name: "Student Management",
-    subItems: [
-      { name: "Exam", path: "/alerts", pro: false },
-      { name: "Quiz", path: "/avatars", pro: false },
-
-    ],
+   path: "/students",
   },
 
 ]
@@ -88,12 +84,7 @@ const instructorItems: NavItem[] = [
   {
     icon: <PieChartIcon />,
     name: "Instructor Management",
-    subItems: [
-      { name: "Category", path: "/line-chart", pro: false },
-      { name: "Courses", path: "/bar-chart", pro: false },
-      { name: "Chapters", path: "/bar-chart", pro: false },
-
-    ],
+    path :"/instructors"
   }]
 const navItems: NavItem[] = [
   {

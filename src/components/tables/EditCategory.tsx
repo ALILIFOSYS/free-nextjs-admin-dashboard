@@ -24,7 +24,6 @@ export default function EditCategory({ category, CloseModal }: CategoryTableProp
   const [isUploading, setIsUploading] = useState(false);
   const [isModified, setIsModified] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  console.log(category, "sfdsd");
 
    const router = useRouter()
   // Check if form has been modified
@@ -103,16 +102,12 @@ export default function EditCategory({ category, CloseModal }: CategoryTableProp
 
     try {
       let media_src = category.media_src;
-      console.log(selectedFile, "selectedFile");
 
       if (selectedFile) {
-        console.log("he");
 
         const uploadResult = await uploadToS3();
-        console.log(media_src, "media_src");
         if (uploadResult && typeof uploadResult === 'object' && 'imageUrl' in uploadResult && 'fileType' in uploadResult) {
           const { imageUrl, fileType } = uploadResult;
-          console.log(imageUrl, "imageUrl", fileType, "fileType");
           const { data } = await axios.put(
             `${BaseUrl}/medias/update-media`,
             {
@@ -127,7 +122,6 @@ export default function EditCategory({ category, CloseModal }: CategoryTableProp
               }
             }
           );
-          console.log(data, "update Media");
         }
 
       } else if (previewImage === null) {
@@ -142,14 +136,12 @@ export default function EditCategory({ category, CloseModal }: CategoryTableProp
         media_src,
       };
 
-      console.log('Updated category data:', formData);
       const updateCategory = await axios.put(`${BaseUrl}/courses/update-category`, formData, {
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
         }
       });
-      console.log(updateCategory, "updateCategory");
       CloseModal();
       alert('Category updated successfully!');
       router.refresh(); // Refresh the page to reflect changes
@@ -160,7 +152,6 @@ export default function EditCategory({ category, CloseModal }: CategoryTableProp
   };
 
   const handleCancel = () => {
-    console.log("hisdf");
     CloseModal()
     // Reset form to original values
     setCategoryTitle(category.title);
@@ -170,7 +161,6 @@ export default function EditCategory({ category, CloseModal }: CategoryTableProp
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
-    console.log("hi");
     
     
   };

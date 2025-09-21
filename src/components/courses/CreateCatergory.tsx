@@ -1,11 +1,9 @@
 'use client';
 
-import { useState, useRef, ChangeEvent, use } from 'react';
+import { useState, useRef, ChangeEvent } from 'react';
 import Image from 'next/image';
 import { BaseUrl } from '@/constents/serverBaseUrl';
 import axios from 'axios';
-import { log } from 'console';
-import EditCategory from '../tables/EditCategory';
 import { useRouter } from 'next/navigation';
 
 export default function CreateCategory({ CloseModal }: { CloseModal: () => void }) {
@@ -15,8 +13,6 @@ export default function CreateCategory({ CloseModal }: { CloseModal: () => void 
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isUploading, setIsUploading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const [editIndex,setEditIndex] = useState<number | null>(null);
-   const [edit ,setEdit] = useState(false);
     const [uploadProgress, setUploadProgress] = useState <number | null> (0);
 
     const router = useRouter();
@@ -52,14 +48,12 @@ export default function CreateCategory({ CloseModal }: { CloseModal: () => void 
             });
 
             const { signedUrl } = await response.data;
-            console.log(signedUrl, "signedUrl");
 
             const uploadResponse = await axios.put(signedUrl, selectedFile, {
                 headers: {
                     'Content-Type': selectedFile.type,
                 },
             });
-            console.log(uploadResponse, "uploadResponse");
 
             if (!uploadResponse) {
                 throw new Error('Upload failed');
@@ -81,7 +75,6 @@ export default function CreateCategory({ CloseModal }: { CloseModal: () => void 
                 return;
             }
             const { imageUrl, fileType } = uploadResult;
-            console.log(imageUrl, "imageUrl");
 
             // Submit your form data
           
@@ -100,7 +93,6 @@ export default function CreateCategory({ CloseModal }: { CloseModal: () => void 
                     }
                 }
             );
-            console.log(data, "createNewMedia");
             const mediaId = data.media.id;
             const CategoryData = {
                 title: categoryTitle,
@@ -114,7 +106,7 @@ export default function CreateCategory({ CloseModal }: { CloseModal: () => void 
                     'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
                 }
             });
-            console.log(createCategory, "createCategory");
+console.log(createCategory);
 
             setIsFeatured(false);
             setCategoryTitle('');
@@ -129,10 +121,7 @@ export default function CreateCategory({ CloseModal }: { CloseModal: () => void 
 
     return (
         <>
-        {edit ?
-        // <EditCategory  initialData={}/>jk
-    <>Edit Category</>
-        : 
+   
         <div className=" mx-auto p-6 bg-white rounded-lg shadow-md">
             <h1 className="text-2xl font-bold mb-6">New Category</h1>
 
@@ -222,7 +211,7 @@ export default function CreateCategory({ CloseModal }: { CloseModal: () => void 
                 </button>
             </form>
         </div>
-        }
+        
         </>
     );
 }

@@ -4,15 +4,10 @@ import axios from 'axios';
 import { BaseUrl } from '@/constents/serverBaseUrl';
 const EditCourseById = async ({ params }) => {
   const { id } =await params
-  console.log(id, "iddddd");
 
 let courseData=[]
 let instructorData=[]
 let categoryData=[]
-
-
-
-
 
   const getCourse = async () => {
 
@@ -45,11 +40,6 @@ let categoryData=[]
   }
 
   [categoryData, instructorData, courseData] = await Promise.all([getCategory(), getInstructor(), getCourse()]);
-
-    console.log(categoryData,"categoryData");
-    console.log(instructorData,"instructorData");
-    console.log(courseData,"courseData");
-
 
   return (
     <div>

@@ -1,30 +1,23 @@
 'use client'
-import React, { useEffect, useRef, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
+import React, { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import { BaseUrl } from "@/constents/serverBaseUrl";
-import Image from "next/image";
-import { Modal } from "../ui/modal";
-import { useModal } from "@/hooks/useModal";
+
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
-import { Bold, Italic, Underline as UnderlineIcon, Strikethrough, List, ListOrdered, Quote, Code, Undo2, Redo2, Heading1, Heading2, Heading3, Link as LinkIcon } from "lucide-react";
+import { Bold, Italic, Strikethrough, List, ListOrdered, Quote, Code, Undo2, Redo2, Heading1, Heading2, Heading3, Link as LinkIcon } from "lucide-react";
 
 
 
 
 export default function EditCourse({ categoryData, instructorData, courseData }) {
   const router = useRouter();
-  const params = useParams();
-  const courseId = params.id;
-  // console.log(categoryData, instructorData, courseData, "he he");
-  console.log(courseData, "sdfds");
 
 
-  const [course, setCourse] = useState(null);
-  const [categories, setCategories] = useState([]);
+
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
@@ -48,7 +41,6 @@ export default function EditCourse({ categoryData, instructorData, courseData })
   const [selectedFile, setSelectedFile] = useState(null);
   const [thumbnail, setThumbnail] = useState('')
   const [isInstructorDropdownOpen, setIsInstructorDropdownOpen] = useState(false);
-  const infoModal = useModal();
 
 
 
@@ -80,7 +72,6 @@ export default function EditCourse({ categoryData, instructorData, courseData })
     }
   };
   const handleFileUpload = async (file) => {
-    console.log(file);
     setUploading(true);
     setUploadProgress(0);
     setSelectedFile(file);
@@ -119,8 +110,6 @@ export default function EditCourse({ categoryData, instructorData, courseData })
 
     try {
       // In a real application, you would submit to your API here
-      console.log('Form data:', formData);
-      console.log(selectedFile, "selectedFile");
       let mediaId
       if (selectedFile) {
         const uploadToS3 = async () => {
@@ -141,17 +130,14 @@ export default function EditCourse({ categoryData, instructorData, courseData })
               },
               data,
             });
-            console.log(response);
 
             const { signedUrl } = await response.data;
-            console.log(signedUrl, "signedUrl");
 
             const uploadResponse = await axios.put(signedUrl, selectedFile, {
               headers: {
                 'Content-Type': selectedFile.type,
               },
             });
-            console.log(uploadResponse, "uploadResponse");
 
             if (!uploadResponse) {
               throw new Error('Upload failed');
@@ -163,12 +149,10 @@ export default function EditCourse({ categoryData, instructorData, courseData })
           }
         };
         const uploadResult = await uploadToS3();
-        console.log(uploadResult, "upload");
         if (!uploadResult) {
           throw new Error('Image upload failed');
         }
         const { imageUrl, fileType } = uploadResult;
-        console.log(imageUrl, "imageUrl");
         const { data } = await axios.post(
           `${BaseUrl}/medias/create-media`,
           {
@@ -183,7 +167,6 @@ export default function EditCourse({ categoryData, instructorData, courseData })
             }
           }
         );
-        console.log(data, "createNewMedia");
         mediaId = data.media.id;
         formData.media_id = mediaId
       }
@@ -195,7 +178,6 @@ export default function EditCourse({ categoryData, instructorData, courseData })
           'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
         }
       })
-      console.log(res, "kfsdf");
 
       setUploading(false)
 
@@ -266,7 +248,6 @@ export default function EditCourse({ categoryData, instructorData, courseData })
     content: formData.description,
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
-      console.log(html);
       setFormData(prev => ({
         ...prev,
         description: html

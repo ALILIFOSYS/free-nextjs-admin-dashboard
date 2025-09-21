@@ -1,5 +1,4 @@
 import CreateCourse from '@/components/courses/CreateCourse'
-import Tiptap from '@/components/Text-Editor/Editor'
 import { BaseUrl } from '@/constents/serverBaseUrl'
 import axios from 'axios'
 const page = async () => {
@@ -27,9 +26,6 @@ const page = async () => {
   }   
 
 [categoryData, instructorData] = await Promise.all([getCategory(), getInstructor()]);
-
-console.log(categoryData, instructorData);
-
   return (
     <>
       <CreateCourse categoryData= {categoryData}  instructorData = {instructorData} />

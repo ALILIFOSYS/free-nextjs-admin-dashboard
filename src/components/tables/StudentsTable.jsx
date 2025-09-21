@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from "react";
+import  { useState } from "react";
 import {
   Table,
   TableBody,
@@ -14,84 +14,64 @@ import { PencilIcon, ResetIcon, TrashBinIcon } from "@/icons";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { BaseUrl } from "@/constents/serverBaseUrl";
-import { useModal } from "@/hooks/useModal";
+import ConfirmModal from '@/components/ui/modal/Confirmation'
+import Pagination from "./Pagination";
+export default function StudentTable({ studentData,onPageChange,handleAction }) {
+
+  const [openModal, setOpenModal] = useState(false)
+  const [deleteId, setDeleteId] = useState();
 
 
-interface Course {
-  id: number;
-  title: string;
-  description: string;
-  category_id: number;
-  media_id: number;
-  price: number;
-  is_active: number;
-  is_free: number;
-  deleted_at: Date | null;
-  user_id: number;
-  category_title: string;
-  instructor_name: string;
-
-}
-
-export default function CoursesTable({ data }: { data: Course[] }) {
-  const [isVisible, setIsVisible] = useState(false);
-
-  const [createCategory, setCreateCategory] = useState(false);
-  const [edit, setEdit] = useState<boolean>(false);
-  const [editIndex, setEditIndex] = useState<number | null>(0);
   const router = useRouter()
 
-  const toggleVisibility = () => {
-    if (window.pageYOffset > 300) {
-      setIsVisible(true);
-    } else {
-      setIsVisible(false);
-    }
-  };
+
   const handleCreate = () => {
-
-    router.push('/courses/new');
+    router.push('/students/new');
   }
 
 
 
-  const handleEdit = (id: number) => {
-    setEdit(true);
-    setCreateCategory(false);
-    setEditIndex(id);
-    router.push(`/courses/edit/${id}`);
+ 
+  const handleEdit = (id) => {
+    router.push(`/students/edit/${id}`);
   }
-  const handleDelete = async (id: number) => {
-    try {
-      
-      // Logic to handle category deletion
-      const deleteCategory = await axios.delete(`${BaseUrl}/courses/delete-course/${id}`, {
-        // You can show a confirmation dialog or perform the deletion here
+  const handleDelete = async (id) => {
+      setDeleteId(id)
+      setOpenModal(true)
+   
+  }
+
+
+
+  const handleYes = async () => {
+    const deleteChapter = await axios.delete(`${BaseUrl}/students/block-student/${deleteId}`,
+      {
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
         }
-      });
-      
-      if (deleteCategory.data.status) {
-        alert(deleteCategory.data.message);
-        router.refresh()
       }
-    } catch (error) {
-      console.error("Error deleting category:", error);
+    )
+    if (deleteChapter.status === 200) {
+      setOpenModal(false)
+      handleAction()
+    } else {
+      console.log("error");
     }
   }
 
+  const handleNo = () => {
+    setOpenModal(false)
+  }
 
-  useEffect(() => {
-    window.addEventListener('scroll', toggleVisibility);
-    return () => window.removeEventListener('scroll', toggleVisibility);
-  }, []);
+
+ 
   return (
     <>
-     
-      <div className="max-w ">
-        <button className='px-3 py-1  border border-blue-500 text-blue-500 rounded hover:bg-blue-500 hover:text-white transition' onClick={handleCreate}>Create Courses +</button>
+      {openModal && <ConfirmModal handleYes={handleYes} handleNo={handleNo} />}
+
+      <div className="max-w my-5 ">
+        <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" onClick={handleCreate}>Create Student</button>
       </div>
       <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
         <div className="max-w ">
@@ -110,33 +90,28 @@ export default function CoursesTable({ data }: { data: Course[] }) {
                     isHeader
                     className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                   >
-                    Course Name
+                    Name
                   </TableCell>
                   <TableCell
                     isHeader
                     className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                   >
-                    Free 
+                    Email
                   </TableCell>
                   <TableCell
                     isHeader
                     className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                   >
-                    Price
+                    Phone
                   </TableCell>
-                  <TableCell
-                    isHeader
-                    className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-                  >
-                    Insctructor
-                  </TableCell>
-
                   <TableCell
                     isHeader
                     className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                   >
                     Status
                   </TableCell>
+
+
                   <TableCell
                     isHeader
                     className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
@@ -148,7 +123,7 @@ export default function CoursesTable({ data }: { data: Course[] }) {
 
               {/* Table Body */}
               <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                {data.map((value, index) => (
+                {studentData.status && studentData.data.length>0&& studentData.data.map((value, index) => (
                   <TableRow key={index}>
                     <TableCell className="px-5 py-4 sm:px-6 text-start">
 
@@ -169,36 +144,21 @@ export default function CoursesTable({ data }: { data: Course[] }) {
                           <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
                             <div style={{ cursor: "pointer" }}>
 
-                              {value.title}
+                              {value.name}
                             </div>
                           </span>
 
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                      <div>
 
-                        <label className="flex items-center">
-                          {/* <input
-                            type="checkbox"
-                            name="is_active"
-                            checked={value.is_free == 1 ? true : false}
-                            onChange={handlePublish}
-                            className="mx-3 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                          /> */}
-                          {value.is_free ? <Badge variant="solid" color="success">free</Badge> : <Badge variant="solid" color="error">Premium</Badge>}
-                          {/* <span className="ml-2 text-sm font-medium text-gray-700"> Approve and Publish</span> */}
-                        </label>
-                      </div>
-                    </TableCell>
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                       <div className="flex -space-x-2">
-                        {value.price ? value.price : 0}
+                        {value.email}
                       </div>
                     </TableCell>
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      {value.instructor_name}
+                      {value.phone}
                     </TableCell>
 
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
@@ -211,13 +171,13 @@ export default function CoursesTable({ data }: { data: Course[] }) {
                         </Badge>)}
                     </TableCell>
                     <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                      {value && value.is_active ?
+                      {value && !value.deleted_at ?
 
                         <>
-                          <button className="p-2 text-gray-500 hover:text-gray-900 dark:hover:text-white/90" onClick={()=>handleDelete(value.id)}>
+                          <button className="p-2 text-red-700 hover:text-red-400 dark:hover:text-white/90" onClick={() => handleDelete(value.id)}>
                             <TrashBinIcon />
                           </button>
-                          <button className="p-2 text-gray-500 hover:text-gray-900 dark:hover:text-white/90" onClick={() => handleEdit(value.id)}>
+                          <button className="p-2 text-yellow-600 hover:text-gray-900 dark:hover:text-white/90" onClick={() => handleEdit(value.id)}>
                             <PencilIcon />
                           </button>
                         </>
@@ -232,7 +192,14 @@ export default function CoursesTable({ data }: { data: Course[] }) {
             </Table>
           </div>
         </div>
+        <div className="m-5 justify-items-end">
+          {studentData.status && studentData.pagination &&
+            <Pagination totalPages={studentData.pagination.totalPages} currentPage={studentData.pagination.currentPage} onPageChange={onPageChange} />
+          }
+        </div>
       </div>
+
+
     </>
   );
 }

@@ -39,7 +39,7 @@ const scrollToTop = () => {
 
 
 export default function CategoryTable({ getCategoryData }: { getCategoryData: Category[] }) {
-    const [isVisible, setIsVisible] = useState(false);
+    // const [isVisible, setIsVisible] = useState(false);
 
     const [createCategory, setCreateCategory] = useState(false);
     const [edit, setEdit] = useState<boolean>(false);
@@ -48,20 +48,17 @@ export default function CategoryTable({ getCategoryData }: { getCategoryData: Ca
 
     const router = useRouter()
 
-    const toggleVisibility = () => {
-        if (window.pageYOffset > 300) {
-            setIsVisible(true);
-        } else {
-            setIsVisible(false);
-        }
-    };
+    // const toggleVisibility = () => {
+    //     if (window.pageYOffset > 300) {
+    //         setIsVisible(true);
+    //     } else {
+    //         setIsVisible(false);
+    //     }
+    // };
     const handleCreate = () => {
 
         setCreateCategory(true);
         setEdit(false)
-        // Logic to handle category creation
-        console.log("Create Category button clicked");
-        // You can redirect to a create category page or open a modal here
     }
 
     const CloseModal = () => {
@@ -70,14 +67,9 @@ export default function CategoryTable({ getCategoryData }: { getCategoryData: Ca
     const handleEdit = (id: number) => {
         setCreateCategory(false);
         scrollToTop()
-        console.log(id);
         setEdit(true);
         setEditIndex(id);
-        console.log(getCategoryData[id]);
 
-        // Logic to handle category editing
-        console.log("Edit button clicked");
-        // You can redirect to an edit category page or open a modal here
     }
     const handleDelete = async (id: number) => {
         try {
@@ -101,7 +93,6 @@ export default function CategoryTable({ getCategoryData }: { getCategoryData: Ca
         window.addEventListener('scroll', toggleVisibility);
         return () => window.removeEventListener('scroll', toggleVisibility);
     }, []);
-    console.log(edit, "edit");
 
     return (
         <>

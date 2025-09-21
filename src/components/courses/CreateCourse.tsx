@@ -5,7 +5,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
-import { Bold, Italic, Underline as UnderlineIcon, Strikethrough, List, ListOrdered, Quote, Code, Undo2, Redo2, Heading1, Heading2, Heading3, Link as LinkIcon } from "lucide-react";
+import { Bold, Italic, Strikethrough, List, ListOrdered, Quote, Code, Undo2, Redo2, Heading1, Heading2, Heading3, Link as LinkIcon } from "lucide-react";
 import axios from 'axios';
 import { BaseUrl } from '@/constents/serverBaseUrl';
 
@@ -60,7 +60,6 @@ const CourseCreationForm = ({ categoryData, instructorData }: { categoryData: Ca
   // Handle form input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
-    console.log(name, value, type, "name, value, type");
 
     if (name == 'categoryName') {
       setFormData(prev => ({
@@ -70,7 +69,6 @@ const CourseCreationForm = ({ categoryData, instructorData }: { categoryData: Ca
       }))
       return
     }
-    // console.log(e.target.value,"kjsfkdsj");
 
     if (type === 'checkbox' && 'checked' in e.target) {
       const checked = (e.target as HTMLInputElement).checked;
@@ -123,7 +121,6 @@ const CourseCreationForm = ({ categoryData, instructorData }: { categoryData: Ca
 
   // Simulate file upload
   const handleFileUpload = async (file: any) => {
-    console.log(file);
     setUploading(true);
     setUploadProgress(0);
     setSelectedFile(file);
@@ -184,8 +181,7 @@ const CourseCreationForm = ({ categoryData, instructorData }: { categoryData: Ca
 
     try {
       // In a real application, you would submit to your API here
-      console.log('Form data:', formData);
-      console.log(selectedFile, "selectedFile");
+    
 
       const uploadToS3 = async () => {
         if (!selectedFile) return null;
@@ -193,7 +189,7 @@ const CourseCreationForm = ({ categoryData, instructorData }: { categoryData: Ca
         // setIsUploading(true);
         // setUploadProgress(0);
         try {
-          const fileName = `courses/${Date.now()}_${selectedFile.name}`;
+          const fileName = `courses/${selectedFile.name}`;
           const fileType = selectedFile.type
           const data = {
             fileName,
@@ -205,17 +201,14 @@ const CourseCreationForm = ({ categoryData, instructorData }: { categoryData: Ca
             },
             data,
           });
-          console.log(response);
 
           const { signedUrl } = await response.data;
-          console.log(signedUrl, "signedUrl");
 
           const uploadResponse = await axios.put(signedUrl, selectedFile, {
             headers: {
               'Content-Type': selectedFile.type,
             },
           });
-          console.log(uploadResponse, "uploadResponse");
 
           if (!uploadResponse) {
             throw new Error('Upload failed');
@@ -227,12 +220,10 @@ const CourseCreationForm = ({ categoryData, instructorData }: { categoryData: Ca
         }
       };
       const uploadResult = await uploadToS3();
-      console.log(uploadResult, "upload");
       if (!uploadResult) {
         throw new Error('Image upload failed');
       }
       const { imageUrl, fileType } = uploadResult;
-      console.log(imageUrl, "imageUrl");
       const { data } = await axios.post(
         `${BaseUrl}/medias/create-media`,
         {
@@ -247,7 +238,6 @@ const CourseCreationForm = ({ categoryData, instructorData }: { categoryData: Ca
           }
         }
       );
-      console.log(data, "createNewMedia");
       const mediaId = data.media.id;
       
      formData.media_id=mediaId
@@ -258,6 +248,8 @@ const CourseCreationForm = ({ categoryData, instructorData }: { categoryData: Ca
           'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
         }
       })
+    console.log(res);
+    
       setUploading(false)
 
       alert('Course created successfully!');
@@ -311,7 +303,6 @@ editor?.commands.clearContent()
     content: "",
     onUpdate: ({ editor }) => {
       const html = editor.getHTML();
-      console.log(html);
       setFormData(prev => ({
         ...prev,
         description: html

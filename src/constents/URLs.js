@@ -1,0 +1,1 @@
+export const AWS_STUDENT_BASE_URL = 'https://trailcourses.s3.ap-south-1.amazonaws.com/'

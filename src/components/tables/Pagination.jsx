@@ -1,14 +1,11 @@
-type PaginationProps = {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-};
 
-const Pagination: React.FC<PaginationProps> = ({
+
+const Pagination = ({
   currentPage,
   totalPages,
   onPageChange,
 }) => {
+  
   const pagesAroundCurrent = Array.from(
     { length: Math.min(3, totalPages) },
     (_, i) => i + Math.max(currentPage - 1, 1)

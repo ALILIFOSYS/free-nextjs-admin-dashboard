@@ -19,8 +19,7 @@ const router = useRouter();
     e.preventDefault();
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
-    console.log("Email:", email);
-    console.log("Password:", password);
+  
 
     // Basic valeidation
     if (!email || !password) {
@@ -35,7 +34,6 @@ const router = useRouter();
       }
     })
 
-    console.log(data, "login response");
     if(data.token){
       localStorage.setItem("AuthToken", data.token);
       localStorage.setItem("userEmail", data.email);
