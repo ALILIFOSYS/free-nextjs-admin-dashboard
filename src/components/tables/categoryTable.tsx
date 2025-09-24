@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import {
     Table,
     TableBody,
@@ -89,10 +89,10 @@ export default function CategoryTable({ getCategoryData }: { getCategoryData: Ca
             console.error("Error deleting category:", error);
         }
     }
-    useEffect(() => {
-        window.addEventListener('scroll', toggleVisibility);
-        return () => window.removeEventListener('scroll', toggleVisibility);
-    }, []);
+    // useEffect(() => {
+    //     window.addEventListener('scroll', toggleVisibility);
+    //     return () => window.removeEventListener('scroll', toggleVisibility);
+    // }, []);
 
     return (
         <>

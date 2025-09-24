@@ -2,7 +2,7 @@ import React from 'react'
 import EditInstructor from '@/components/instructors/EditInstructor'
 import { BaseUrl } from '@/constents/serverBaseUrl'
 import axios from 'axios'
-const page =async ({params}) => {
+const Page =async ({params}) => {
 const {id} = await params
     const getStudentData = async () => {
       const res = await axios.get(`${BaseUrl}/instructors/get-instructor/${id}`, {
@@ -22,4 +22,4 @@ const {id} = await params
   )
 }
 
-export default page
+export default Page

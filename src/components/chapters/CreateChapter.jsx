@@ -2,7 +2,13 @@
 
 import { BaseUrl } from '@/constents/serverBaseUrl';
 import axios from 'axios';
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
+import { useEditor, EditorContent } from "@tiptap/react";
+import { Bold, Italic, Strikethrough, List, ListOrdered, Quote, Code, Undo2, Redo2, Heading1, Heading2, Heading3, Link as LinkIcon } from "lucide-react";
+import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
+import Link from "@tiptap/extension-link";
+
 
 // Helper component for icons
 const PlusIcon = () => (
@@ -34,6 +40,7 @@ export default function CreateChapters({ course_id, data }) {
             options: ['', '', '', ''],
             answer: '',
         },
+        text :''
     });
 
     const createNewChapter = () => ({
@@ -113,7 +120,7 @@ export default function CreateChapters({ course_id, data }) {
                 headers: {
                     'Content-Type': 'application/json',
                     'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y',
-                    
+
                 }
             })
         } catch (error) {
@@ -123,10 +130,47 @@ export default function CreateChapters({ course_id, data }) {
 
 
     };
+    const editor = useEditor({
+        immediatelyRender: false,
+        extensions: [
+            StarterKit,
+            Underline,
+            Link.configure({
+                openOnClick: false,
+                HTMLAttributes: {
+                    class: "text-blue-500 underline",
+                },
+            }),
+            // TextAlign.configure({
+            //   types: ['heading', 'paragraph'],
+            // }),
+        ],
+        content: "",
+        onUpdate: ({ editor }) => {
+            console.log(editor,"sdf");
+            
+            const html = editor.getHTML();
+            // setFormData(prev => ({
+            //     ...prev,
+            //     description: html
+            // }));
+       
+        },
+        editorProps: {
+            attributes: {
+                class: "prose prose-sm sm:prose lg:prose-lg xl:prose-2xl mx-auto focus:outline-none min-h-[200px] p-4",
+            },
+        },
+    });
+
+    const setLink = () => {
+        const url = window.prompt("Enter URL");
+        if (url) {
+            editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
+        }
+    };
 
 
-
-  
     return (
         <div className="bg-gray-50 dark:bg-gray-900 min-h-screen p-4 sm:p-6 lg:p-8">
             <div className="max-w-4xl mx-auto">
@@ -231,6 +275,8 @@ export default function CreateChapters({ course_id, data }) {
                                                     <option value="document">Document</option>
                                                     <option value="video">Video</option>
                                                     <option value="quiz">Quiz</option>
+                                                    <option value="text">Text</option>
+
                                                 </select>
                                             </div>
                                         </div>
@@ -319,6 +365,124 @@ export default function CreateChapters({ course_id, data }) {
                                                     </div>
                                                 </div>
                                             )}
+                                            {content.contentType === 'text' &&
+                                                <div className="max-w-4xl mx-auto p-6 bg-white  shadow-md">
+                                                    {/* Toolbar */}
+                                                    <div className="flex flex-wrap gap-2 border-b pb-2 mb-3">
+                                                        <button
+                                                            type="button"
+
+                                                            onClick={() => editor.chain().focus().toggleBold().run()}
+                                                        >
+                                                            <Bold className="w-4 h-4" />
+                                                        </button>
+
+                                                        <button
+                                                            type="button"
+
+                                                            onClick={() => editor.chain().focus().toggleItalic().run()}
+                                                        >
+                                                            <Italic className="w-4 h-4" />
+                                                        </button>
+
+                                                        <button
+                                                            type="button"
+
+                                                            onClick={() => editor.chain().focus().toggleStrike().run()}
+                                                        >
+                                                            <Strikethrough className="w-4 h-4" />
+                                                        </button>
+
+                                                        <button
+                                                            type="button"
+
+                                                            onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+                                                        >
+                                                            <Heading1 className="w-4 h-4" />
+                                                        </button>
+
+                                                        <button
+                                                            type="button"
+
+                                                            onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+                                                        >
+                                                            <Heading2 className="w-4 h-4" />
+                                                        </button>
+
+                                                        <button
+                                                            type="button"
+
+                                                            onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+                                                        >
+                                                            <Heading3 className="w-4 h-4" />
+                                                        </button>
+
+                                                        <button
+                                                            type="button"
+
+                                                            onClick={() => editor.chain().focus().toggleBulletList().run()}
+                                                        >
+                                                            <List className="w-4 h-4" />
+                                                        </button>
+
+                                                        <button
+                                                            type="button"
+
+                                                            onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                                                        >
+                                                            <ListOrdered className="w-4 h-4" />
+                                                        </button>
+
+                                                        <button
+                                                            type="button"
+
+                                                            onClick={() => editor.chain().focus().toggleBlockquote().run()}
+                                                        >
+                                                            <Quote className="w-4 h-4" />
+                                                        </button>
+
+                                                        <button
+                                                            type="button"
+
+
+                                                            onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+                                                        >
+                                                            <Code className="w-4 h-4" />
+                                                        </button>
+
+                                                        <button
+                                                            type="button"
+
+
+                                                            onClick={setLink}
+                                                        >
+                                                            <LinkIcon className="w-4 h-4" />
+                                                        </button>
+
+                                                        <button
+                                                            type="button"
+
+
+                                                            onClick={() => editor.chain().focus().undo().run()}
+                                                        >
+                                                            <Undo2 className="w-4 h-4" />
+                                                        </button>
+
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => editor.chain().focus().redo().run()}
+                                                        >
+                                                            <Redo2 className="w-4 h-4" />
+                                                        </button>
+                                                    </div>
+
+                                                    {/* Editor content */}
+
+                                                    <div className="border-b border-gray-200">
+                                                        <EditorContent editor={editor} onChange={()=>console.log("hi")} className="min-h-[300px] max-h-[500px] overflow-y-auto" />
+                                                    </div>
+                                                </div>
+                                            }
                                         </div>
                                     </div>
                                 ))}

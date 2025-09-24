@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Table,
   TableBody,
@@ -14,7 +14,7 @@ import { PencilIcon, ResetIcon, TrashBinIcon } from "@/icons";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { BaseUrl } from "@/constents/serverBaseUrl";
-import { useModal } from "@/hooks/useModal";
+// import { useModal } from "@/hooks/useModal";
 
 
 interface Course {
@@ -34,31 +34,14 @@ interface Course {
 }
 
 export default function CoursesTable({ data }: { data: Course[] }) {
-  const [isVisible, setIsVisible] = useState(false);
-
-  const [createCategory, setCreateCategory] = useState(false);
-  const [edit, setEdit] = useState<boolean>(false);
-  const [editIndex, setEditIndex] = useState<number | null>(0);
+  
   const router = useRouter()
 
-  const toggleVisibility = () => {
-    if (window.pageYOffset > 300) {
-      setIsVisible(true);
-    } else {
-      setIsVisible(false);
-    }
-  };
   const handleCreate = () => {
-
     router.push('/courses/new');
   }
 
-
-
   const handleEdit = (id: number) => {
-    setEdit(true);
-    setCreateCategory(false);
-    setEditIndex(id);
     router.push(`/courses/edit/${id}`);
   }
   const handleDelete = async (id: number) => {
@@ -83,10 +66,7 @@ export default function CoursesTable({ data }: { data: Course[] }) {
   }
 
 
-  useEffect(() => {
-    window.addEventListener('scroll', toggleVisibility);
-    return () => window.removeEventListener('scroll', toggleVisibility);
-  }, []);
+
   return (
     <>
      

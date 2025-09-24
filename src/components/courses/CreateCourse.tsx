@@ -8,6 +8,7 @@ import Underline from "@tiptap/extension-underline";
 import { Bold, Italic, Strikethrough, List, ListOrdered, Quote, Code, Undo2, Redo2, Heading1, Heading2, Heading3, Link as LinkIcon } from "lucide-react";
 import axios from 'axios';
 import { BaseUrl } from '@/constents/serverBaseUrl';
+import Image from 'next/image';
 
 // Define TypeScript interfaces
 interface Instructor {
@@ -120,7 +121,7 @@ const CourseCreationForm = ({ categoryData, instructorData }: { categoryData: Ca
   };
 
   // Simulate file upload
-  const handleFileUpload = async (file: any) => {
+  const handleFileUpload = async (file : File) => {
     setUploading(true);
     setUploadProgress(0);
     setSelectedFile(file);
@@ -368,7 +369,9 @@ editor?.commands.clearContent()
 
             {selectedFile && !uploading && (
               <div className="flex items-center space-x-2">
-                <img
+                <Image
+                width={50}
+                height={50}
                   src={thumbnail}
                   alt="Thumbnail preview"
                   className="w-16 h-16 object-cover rounded-md"

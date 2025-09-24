@@ -3,7 +3,7 @@ import CoursesTable from '@/components/tables/CoursesTable'
 import axios from 'axios';
 import React from 'react'
 
-const page =async () => {
+const Page =async () => {
   const getCourseDetails = async () => {
       const data = await axios.get('http://localhost:3001/admin/api/courses/get-courses', {
         headers: {
@@ -27,4 +27,4 @@ const page =async () => {
   )
 }
 
-export default page
+export default Page

@@ -1,5 +1,5 @@
-import CreateInstructor from '../../../../components/instructors/CreateInstructor'
-const page = async () => {
+import CreateInstructor from '@/components/instructors/CreateInstructor'
+const Page = async () => {
 
   return (
     <>
@@ -9,4 +9,4 @@ const page = async () => {
   )
 }
 
-export default page
+export default Page

@@ -1,5 +1,5 @@
 'use client'
-import React, { useRef, useState } from "react";
+import  { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { BaseUrl } from "@/constents/serverBaseUrl";
@@ -8,7 +8,8 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
-import { Bold, Italic, Strikethrough, List, ListOrdered, Quote, Code, Undo2, Redo2, Heading1, Heading2, Heading3, Link as LinkIcon } from "lucide-react";
+import { Bold, Italic, Strikethrough, List, ListOrdered, Quote, Code, Undo2, Redo2, Heading1, Heading2, Heading3 } from "lucide-react";
+import Image from "next/image";
 
 
 
@@ -18,8 +19,8 @@ export default function EditCourse({ categoryData, instructorData, courseData })
 
 
 
-  const [loading, setLoading] = useState(false);
-  const [saving, setSaving] = useState(false);
+  // const [loading, setLoading] = useState(false);
+  // const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
     id: courseData[0].id,
     media_id: courseData[0].media_id,
@@ -178,6 +179,7 @@ export default function EditCourse({ categoryData, instructorData, courseData })
           'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
         }
       })
+console.log(res);
 
       setUploading(false)
 
@@ -214,7 +216,7 @@ export default function EditCourse({ categoryData, instructorData, courseData })
 
   const selectedInstructorNames = formData.instructors.map(id => {
     const instructor = instructorData.find(inst => inst.id === id);
-    return instructor ? instructor.instructor_name : '';
+    return instructor ? instructor.name : '';
   });
   const selectAllInstructors = () => {
     setFormData(prev => ({
@@ -267,13 +269,13 @@ export default function EditCourse({ categoryData, instructorData, courseData })
 
 
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-lg">Loading course details...</div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex items-center justify-center h-64">
+  //       <div className="text-lg">Loading course details...</div>
+  //     </div>
+  //   );
+  // }
 
   if (!courseData) {
     return (
@@ -324,7 +326,9 @@ export default function EditCourse({ categoryData, instructorData, courseData })
 
               {selectedFile && !uploading && (
                 <div className="flex items-center space-x-2">
-                  <img
+                  <Image
+                  width={50}
+                  height={50}
                     src={thumbnail}
                     alt="Thumbnail preview"
                     className="w-16 h-16 object-cover rounded-md"
@@ -390,8 +394,7 @@ export default function EditCourse({ categoryData, instructorData, courseData })
                         key={index}
                         className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded"
                       >
-                        {name}
-                      </span>
+                        {name}                     </span>
                     ))
                   )}
                 </div>
@@ -438,7 +441,7 @@ export default function EditCourse({ categoryData, instructorData, courseData })
                         )}
                       </div>
                       {/* <span className="mr-2 text-lg">{instructor.avatar}</span> */}
-                      <span>{instructor.instructor_name}</span>
+                      <span>{instructor.name}</span>
                     </div>
                   ))}
                 </div>
@@ -648,13 +651,13 @@ export default function EditCourse({ categoryData, instructorData, courseData })
           >
             Cancel
           </button>
-          <button
+          {/* <button
             type="submit"
             disabled={saving}
             className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
           >
             {saving ? 'Saving...' : 'Save & Update'}
-          </button>
+          </button> */}
         </div>
       </form>
     </div>

@@ -30,7 +30,7 @@ const [name, setName] = useState<string | null>("");
       console.log("User Info:", { email, userName, role });
     }
     setName(userName);
-  })
+  },[name])
   return (
     <div className="relative">
       <button

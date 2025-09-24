@@ -44,7 +44,7 @@ let categoryData=[]
   return (
     <div>
      
-      <EditCourse courseData={courseData} categoryData={categoryData} instructorData={instructorData}/>
+      <EditCourse courseData={courseData} categoryData={categoryData} instructorData={instructorData.data}/>
 
     </div>
   )

@@ -122,6 +122,8 @@ export default function EditCategory({ category, CloseModal }: CategoryTableProp
               }
             }
           );
+          console.log(data);
+          
         }
 
       } else if (previewImage === null) {
@@ -142,6 +144,8 @@ export default function EditCategory({ category, CloseModal }: CategoryTableProp
           'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
         }
       });
+      console.log(updateCategory);
+      
       CloseModal();
       alert('Category updated successfully!');
       router.refresh(); // Refresh the page to reflect changes
