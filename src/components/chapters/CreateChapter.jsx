@@ -147,7 +147,6 @@ export default function CreateChapters({ course_id, data }) {
         ],
         content: "",
         onUpdate: ({ editor }) => {
-            console.log(editor,"sdf");
             
             const html = editor.getHTML();
             // setFormData(prev => ({

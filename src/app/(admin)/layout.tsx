@@ -22,7 +22,7 @@ export default function AdminLayout({
 
     useEffect(()=>{
       const token = localStorage.getItem("AuthToken");
-      console.log(token, "token");
+      // console.log(token, "token");
       
       if (!token) {
         window.location.href = "/signin";

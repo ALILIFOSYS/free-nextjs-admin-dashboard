@@ -3,6 +3,7 @@
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import Button from "@/components/ui/button/Button";
+import { BaseUrl } from "@/constents/serverBaseUrl";
 import { EyeCloseIcon, EyeIcon } from "@/icons";
 import axios from "axios";
 
@@ -27,7 +28,7 @@ const router = useRouter();
       return;
     }
     const Logindata = { email, password }
-    const {data} = await axios.post('http://localhost:3001/admin/api/dashboard/login', Logindata, {
+    const {data} = await axios.post(`${BaseUrl}/dashboard/login`, Logindata, {
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'

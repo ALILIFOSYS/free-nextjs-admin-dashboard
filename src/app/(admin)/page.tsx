@@ -6,6 +6,7 @@ import ComponentCard from "@/components/common/ComponentCard";
 import { ToppCoursesTable } from "@/components/tables/ToppCoursesTable";
 import { TopStudentsTable } from "@/components/tables/TopStudentsTable";
 import { TopInstructorsTable } from "@/components/tables/TopInstructorsTable";
+import { BaseUrl } from "@/constents/serverBaseUrl";
 // export const metadata: Metadata = {
 //   icons:{
 //     icon: '/icon.png',
@@ -17,7 +18,7 @@ import { TopInstructorsTable } from "@/components/tables/TopInstructorsTable";
     
 export default async function Ecommerce() {
   const getDashboardData = async () => {
-      const data = await axios.get('http://localhost:3001/admin/api/dashboard/get-all-dashboard-data', {
+      const data = await axios.get(`${BaseUrl}/dashboard/get-all-dashboard-data`, {
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'

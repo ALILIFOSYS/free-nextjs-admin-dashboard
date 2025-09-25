@@ -33,7 +33,7 @@ const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
   const [verifyOtp, setVerifyOtp] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
-const [error,setError] = useState('')
+  const [error, setError] = useState('')
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -46,9 +46,9 @@ const [error,setError] = useState('')
       }
     })
     // Handle the password recovery logic here
-    console.log(sendOtp, "sent");
     if (sendOtp.data.status) {
       setVerifyOtp(true)
+      setIsLoading(false);
     } else {
       setError(sendOtp.data.message)
       setIsLoading(false);
@@ -80,10 +80,10 @@ const [error,setError] = useState('')
                   type="email"
                   id="email"
                   value={email}
-                  onChange={(e) =>{
-                     setEmail(e.target.value)
-                     setError('')
-                    }
+                  onChange={(e) => {
+                    setEmail(e.target.value)
+                    setError('')
+                  }
                   }
                   placeholder="Email address"
                   required

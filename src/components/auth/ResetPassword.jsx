@@ -16,7 +16,6 @@ export default function ResetPasswordForm() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const userEmail = searchParams.get('email')
-    console.log(userEmail);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -33,11 +32,8 @@ export default function ResetPasswordForm() {
             // Simulate API call to your backend
             // In a real application, you'd send the password and a token
             // received from a "forgot password" email link.
-            console.log(password,userEmail);
-            console.log(encoder(password));
             
             const encodePassword = encoder(password)
-            console.log(encodePassword);
             const data ={
                 password : encodePassword,
                 email : userEmail
@@ -50,7 +46,6 @@ export default function ResetPasswordForm() {
                 }
             })
             // Handle the password recovery logic here
-            console.log(resetPassword, "sent");
             if (resetPassword.data.status) {
                 setShowSuccessModal(true);
             }
