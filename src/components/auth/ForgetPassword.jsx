@@ -35,23 +35,30 @@ const ForgotPasswordPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('')
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('')
-    const sendOtp = await axios.post(`${BaseUrl}/dashboard/forgot-password`, { email }, {
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y',
-
+        e.preventDefault();
+    try {
+      
+      setIsLoading(true);
+      setError('')
+      const sendOtp = await axios.post(`${BaseUrl}/dashboard/forgot-password`, { email }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y',
+  
+        }
+      })
+      // Handle the password recovery logic here
+      
+      if (sendOtp.data.status) {
+        setVerifyOtp(true)
+        setIsLoading(false);
+      } else {
+        setError(sendOtp.data.msg)
+        setIsLoading(false);
       }
-    })
-    // Handle the password recovery logic here
-    if (sendOtp.data.status) {
-      setVerifyOtp(true)
-      setIsLoading(false);
-    } else {
-      setError(sendOtp.data.message)
-      setIsLoading(false);
+    } catch (error) {
+          setError(error.response.data.msg)
+        setIsLoading(false);
     }
 
   };
@@ -91,7 +98,7 @@ const ForgotPasswordPage = () => {
                 />
               </div>
               {error && (
-                <div className="text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-200 text-center">
+                <div className="text-sm text-red-600  p-3 rounded-lg  text-center">
                   {error}
                 </div>
               )}
