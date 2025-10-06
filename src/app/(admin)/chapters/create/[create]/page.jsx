@@ -15,6 +15,7 @@ const page = async ({ params }) => {
                 'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
             }
         })
+        
         const ress = {
             last_number: LastNumber.data[0].serial_number + 1,
             course_title: LastNumber.data[0].title

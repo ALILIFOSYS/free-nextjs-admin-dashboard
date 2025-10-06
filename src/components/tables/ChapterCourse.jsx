@@ -111,7 +111,7 @@ export default function ChapterCoursesTable({ data }) {
 
                                         <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                                             <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                                            onClick={()=>handleChapter(value.id)}
+                                            onClick={()=>handleChapter(value.id,value.title)}
                                             >
                                                 View Chapters
                                             </button>

@@ -1,0 +1,28 @@
+{
+    "option_1": {
+        "text": "ohm",
+        "is_correct": false
+    },
+    "option_2": {
+        "text": "watt",
+        "is_correct": true
+    },
+    "option_3": {
+        "text": "ambire",
+        "is_correct": false
+    },
+    "option_4": {
+        "text": "n\/m",
+        "is_correct": false
+    }
+}
+{
+    "option_true": {
+        "text": "True",
+        "is_correct": true
+    },
+    "option_false": {
+        "text": "False",
+        "is_correct": false
+    }
+}
