@@ -86,6 +86,16 @@ const instructorItems: NavItem[] = [
     name: "Instructor Management",
     path :"/instructors"
   }]
+const generalSettings : NavItem[]=[
+  {
+     icon: <PlugInIcon />,
+     name: "Settings Management",
+    subItems: [
+      { name: "General Settings", path: "/settings", pro: false },
+      { name: "Certificate Configaration", path: "/certificates", pro: false },
+    ],
+  }
+]
 const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
@@ -456,6 +466,22 @@ const AppSidebar: React.FC = () => {
                 )}
               </h2>
               {renderMenuItems(instructorItems, "others")}
+            </div>
+                 <div className="">
+              <h2
+                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded && !isHovered
+                  ? "lg:justify-center"
+                  : "justify-start"
+                  }`}
+              >
+                {isExpanded || isHovered || isMobileOpen ? (
+                  "GENERAL SETTINGS"
+                ) : (
+
+                  <HorizontaLDots />
+                )}
+              </h2>
+              {renderMenuItems(generalSettings, "others")}
             </div>
           </div>
         </nav>

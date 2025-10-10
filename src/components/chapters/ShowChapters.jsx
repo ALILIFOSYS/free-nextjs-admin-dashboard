@@ -101,19 +101,16 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
 
   // Edit Chapter Handlers
   const handleEditChapter = (chapter) => {
-
     setEditingChapter(chapter.id);
     setEditChapterForm({
       chapterTitle: chapter.chapterTitle,
       serialNumber: chapter.serialNumber
     });
   };
-  // console.log(editChapterForm, "editChapterForm");
 
   const handleSaveChapterEdit = async (chapterId) => {
     try {
       console.log(chapterId, "fdsdfghjkkhf");
-
 
       const data = await axios.put(`${BaseUrl}/chapters/update-chapter/${chapterId}`, editChapterForm, {
         headers: {
@@ -122,8 +119,6 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
         }
       })
       console.log(data, "gfdsdhj");
-
-
 
       setEditingChapter(null);
       setEditChapterForm({});
@@ -160,33 +155,126 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
     }
   };
 
-  // Edit Content Handlers
+  // Edit Content Handlers - UPDATED
   const handleEditContent = (content) => {
     console.log(content, "lhfdsdfhjkl;");
     setEditingContent(content.id);
-    setEditContentForm({
-      contentTitle: content.contentTitle,
-      isFree: content.isFree,
-      contentType: content.contentType,
-      textContent: content.textContent || '',
-      videoUrl: content.videoUrl || ''
+    if (content.contentType === 'quiz') {
+      setEditContentForm({
+        contentTitle: content.contentTitle,
+        isFree: content.isFree,
+        contentType: content.contentType,
+        textContent: content.textContent || '',
+        videoUrl: content.videoUrl || '',
+        quizType: content.Quiz.quizType,
+        marksPerQuestion: content.Quiz.marksPerQuestion,
+        durationPerQuestion: content.Quiz.durationPerQuestion,
+        question: content.Quiz.question,
+        options: {
+          option_1: { text: content.Quiz.options.option_1.text, is_correct: content.Quiz.options.option_1.is_correct },
+          option_2: { text: content.Quiz.options.option_2.text, is_correct: content.Quiz.options.option_2.is_correct },
+          option_3: { text: content.Quiz.options.option_3.text, is_correct: content.Quiz.options.option_3.is_correct },
+          option_4: { text: content.Quiz.options.option_4.text, is_correct: content.Quiz.options.option_4.is_correct }
+        },
+      });
+    } else {
+      setEditContentForm({
+        contentTitle: content.contentTitle,
+        isFree: content.isFree,
+        contentType: content.contentType,
+        textContent: content.textContent || '',
+        videoUrl: content.videoUrl || ''
+      });
+    }
+  };
+
+  // UPDATED: Fixed handleQuizOptionChange function
+  const handleQuizOptionChange = (optionKey, field, value) => {
+    console.log(optionKey, field, value, "hehee");
+       if (field === 'is_correct' && value === true) {
+            // Uncheck all other options
+            Object.keys(newOptions).forEach(key => {
+                newOptions[key].is_correct = false;
+            });
+            
+        } 
+    setEditContentForm(prev => ({
+      ...prev,
+      options: {
+        ...prev.options,
+        [optionKey]: {
+          ...prev.options[optionKey],
+          [field]: field === 'is_correct' ? value : value
+        }
+      }
+    }));
+  };
+
+  // NEW: Function to handle true/false option changes
+  const handleTrueFalseChange = (optionValue) => {
+    setEditContentForm(prev => {
+      const newOptions = {
+        option_true: { text: 'True', is_correct: optionValue === 'True' },
+        option_false: { text: 'False', is_correct: optionValue === 'False' }
+      };
+      
+      return {
+        ...prev,
+        options: newOptions
+      };
     });
+  };
+
+  // NEW: Function to handle quiz field changes
+  const handleQuizChange = (field, value) => {
+    setEditContentForm(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
 
   const handleSaveContentEdit = async (contentId) => {
     try {
       console.log(editContentForm, "jhgfg", contentId);
-      const { data } = await axios.put(`${BaseUrl}/chapters/update-content/${contentId}`, editContentForm, {
+      
+      // Prepare the data for API call
+      const requestData = {
+        contentTitle: editContentForm.contentTitle,
+        isFree: editContentForm.isFree,
+        contentType: editContentForm.contentType,
+        textContent: editContentForm.textContent,
+        videoUrl: editContentForm.videoUrl
+      };
+
+      // Add quiz-specific fields if content type is quiz
+      if (editContentForm.contentType === 'quiz') {
+        requestData.quizType = editContentForm.quizType;
+        requestData.marksPerQuestion = editContentForm.marksPerQuestion;
+        requestData.durationPerQuestion = editContentForm.durationPerQuestion;
+        requestData.question = editContentForm.question;
+        requestData.options = editContentForm.options;
+      }
+
+      // Add media_id if present
+      if (editContentForm.media_id) {
+        requestData.media_id = editContentForm.media_id;
+      }
+
+      const { data } = await axios.put(`${BaseUrl}/chapters/update-content/${contentId}`, requestData, {
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
         }
-      })
+      });
+      
       console.log(data, "gfdsdhj");
       if (data.status) {
-
         setEditingContent(null);
         setEditContentForm({});
+        // Optionally refresh the page or update local state
+        if (onContentEdit) {
+          onContentEdit();
+        }
       }
     } catch (error) {
       console.error('Error updating content:', error);
@@ -217,22 +305,24 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
       }
     }
   };
+
   const uploadDocument = async (file) => {
     const uploadResponse = await uploadImage(file, "chapters")
     console.log(uploadResponse, "upload response");
     return uploadResponse
   }
+
   const handleFile = async (file) => {
     const media_id = await uploadDocument(file)
     console.log(media_id);
     if (media_id) {
-
       setEditContentForm(prev => ({
         ...prev,
         media_id
       }))
     }
   }
+
   // URL validation helper function
   const isValidUrl = (urlString) => {
     try {
@@ -258,8 +348,6 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
         return '📁';
     }
   };
-
-
 
   // --- Tiptap Rich Text Editor Component ---
   const TextEditorComponent = ({ content }) => {
@@ -527,20 +615,18 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
                                            bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                                   placeholder="Content title"
                                 />
-                                {/* <select
-                                  value={editContentForm.contentType}
-                                  onChange={(e) => setEditContentForm(prev => ({
-                                    ...prev,
-                                    contentType: e.target.value
-                                  }))}
-                                  className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded 
-                                           bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                                >
-                                  <option value="text">Text</option>
-                                  <option value="document">Document</option>
-                                  <option value="video">Video</option>
-                                  <option value="quiz">Quiz</option>
-                                </select> */}
+                                <div className="flex items-center">
+                                  <input 
+                                    type="checkbox" 
+                                    checked={editContentForm.isFree} 
+                                    onChange={(e) => setEditContentForm(prev => ({
+                                      ...prev,
+                                      isFree: e.target.checked
+                                    }))} 
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" 
+                                  />
+                                  <label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Free</label>
+                                </div>
                               </div>
                             ) : (
                               <div
@@ -566,7 +652,7 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
                                 <div className="flex gap-1">
                                   <button
                                     className="p-2 text-green-600 dark:text-green-400 border border-green-600 dark:border-green-400 rounded hover:bg-green-600 hover:text-white transition-colors"
-                                    onClick={() => handleSaveContentEdit(content.id, content.contentType)}
+                                    onClick={() => handleSaveContentEdit(content.id)}
                                     title="Save"
                                   >
                                     ✓
@@ -590,7 +676,7 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
                                   </button>
                                   <button
                                     className="p-2 text-red-600 dark:text-red-400 border border-red-600 dark:border-red-400 rounded hover:bg-red-600 hover:text-white transition-colors"
-                                    onClick={() => handleDeleteContent(content.id, content.contentTitle, chapter.chapterTitle)}
+                                    onClick={() => handleDeleteContent(content.id, content.contentTitle)}
                                     title="Delete"
                                   >
                                     🗑
@@ -613,7 +699,6 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
                                         content={editContentForm.textContent}
                                       />
                                     </div>
-
                                   </>
                                 ) : (
                                   <div
@@ -661,7 +746,7 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
                               </div>
                             )}
 
-                            {/* Quiz Content */}
+                            {/* Quiz Content - UPDATED */}
                             {content.contentType === 'quiz' && content.Quiz && (
                               <div className="mt-2">
                                 {editingContent === content.id ? (
@@ -670,29 +755,55 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
                                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                         <div>
                                           <label htmlFor={`quiz-type`} className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Quiz Type</label>
-                                          <select id={`quiz-type`} value={content.Quiz.quizType} onChange={(e) => handleQuizChange(chapterIndex, 'quizType', e.target.value)} className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600">
+                                          <select 
+                                            id={`quiz-type`} 
+                                            value={editContentForm.quizType} 
+                                            onChange={(e) => handleQuizChange('quizType', e.target.value)} 
+                                            className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600"
+                                          >
                                             <option value="mcq">MCQ</option>
                                             <option value="true-false">True/False</option>
                                           </select>
                                         </div>
                                         <div>
                                           <label htmlFor={`quiz-marks`} className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Marks Per Question</label>
-                                          <input type="number" id={`quiz-marks`} value={content.Quiz.marksPerQuestion} min="1" onChange={(e) => handleQuizChange(chapterIndex, 'marksPerQuestion', parseInt(e.target.value) || 1)} className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600" />
+                                          <input 
+                                            type="number" 
+                                            id={`quiz-marks`} 
+                                            value={editContentForm.marksPerQuestion} 
+                                            min="1" 
+                                            onChange={(e) => handleQuizChange('marksPerQuestion', parseInt(e.target.value) || 1)} 
+                                            className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600" 
+                                          />
                                         </div>
                                         <div>
                                           <label htmlFor={`quiz-duration`} className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Duration (Minutes)</label>
-                                          <input type="number" id={`quiz-duration`} value={content.Quiz.durationPerQuestion} min="1" onChange={(e) => handleQuizChange(chapterIndex, 'durationPerQuestion', parseInt(e.target.value) || 1)} className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600" />
+                                          <input 
+                                            type="number" 
+                                            id={`quiz-duration`} 
+                                            value={editContentForm.durationPerQuestion} 
+                                            min="1" 
+                                            onChange={(e) => handleQuizChange('durationPerQuestion', parseInt(e.target.value) || 1)} 
+                                            className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600" 
+                                          />
                                         </div>
                                       </div>
                                       <div>
                                         <label htmlFor={`quiz-question`} className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Question</label>
-                                        <input type="text" id={`quiz-question`} value={content.Quiz.question} onChange={(e) => handleQuizChange(chapterIndex, 'question', e.target.value)} className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600" placeholder="What is the capital of France?" />
+                                        <input 
+                                          type="text" 
+                                          id={`quiz-question`} 
+                                          value={editContentForm.question} 
+                                          onChange={(e) => handleQuizChange('question', e.target.value)} 
+                                          className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600" 
+                                          placeholder="What is the capital of France?" 
+                                        />
                                       </div>
 
-                                      {content.Quiz.quizType === 'mcq' && (
+                                      {editContentForm.quizType === 'mcq' && (
                                         <div className="space-y-3">
                                           <label className="block text-sm font-medium text-gray-900 dark:text-white">Options</label>
-                                          {Object.keys(content.Quiz.options).map((optionKey, optionIndex) => (
+                                          {Object.keys(editContentForm.options).map((optionKey, optionIndex) => (
                                             <div key={optionKey} className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
                                               <div className="flex-1">
                                                 <label htmlFor={`option-${optionKey}`} className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
@@ -701,8 +812,8 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
                                                 <input
                                                   type="text"
                                                   id={`option-${optionKey}`}
-                                                  value={content.Quiz.options[optionKey].text}
-                                                  onChange={(e) => handleQuizOptionChange(chapterIndex, optionKey, 'text', e.target.value)}
+                                                  value={editContentForm.options[optionKey].text}
+                                                  onChange={(e) => handleQuizOptionChange(optionKey, 'text', e.target.value)}
                                                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600"
                                                   placeholder={`Enter option ${optionIndex + 1}`}
                                                 />
@@ -712,11 +823,11 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
                                                   id={`correct-${optionKey}`}
                                                   type="radio"
                                                   name={`correct-answer`}
-                                                  checked={content.Quiz.options[optionKey].is_correct}
-                                                  onChange={(e) => handleQuizOptionChange(chapterIndex, optionKey, 'is_correct', e.target.checked)}
+                                                  checked={editContentForm.options[optionKey].is_correct}
+                                                  onChange={(e) => handleQuizOptionChange(optionKey, 'is_correct', e.target.checked)}
                                                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                                 />
-                                                <label htmlFor={`correct${optionKey}`} className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                                <label htmlFor={`correct-${optionKey}`} className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                                   Correct
                                                 </label>
                                               </div>
@@ -725,7 +836,7 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
                                         </div>
                                       )}
 
-                                      {content.Quiz.quizType === 'true-false' && (
+                                      {editContentForm.quizType === 'true-false' && (
                                         <div className="space-y-3">
                                           <label className="block text-sm font-medium text-gray-900 dark:text-white">True/False Options</label>
                                           {['True', 'False'].map((optionValue) => (
@@ -736,8 +847,8 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
                                                   id={`tf-${optionValue}`}
                                                   type="radio"
                                                   name={`correct-answer`}
-                                                  checked={content.Quiz.options[`option_${optionValue.toLowerCase()}`]?.is_correct || false}
-                                                  onChange={() => handleTrueFalseChange(chapterIndex, optionValue)}
+                                                  checked={editContentForm.options[`option_${optionValue.toLowerCase()}`]?.is_correct || false}
+                                                  onChange={() => handleTrueFalseChange(optionValue)}
                                                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                                                 />
                                                 <label htmlFor={`tf-${optionValue}`} className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
@@ -771,7 +882,6 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
                                       onChange={(e) => handleFile(e.target.files[0])}
                                       className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded 
                                              bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-
                                     />
                                     <div className="flex items-center mt-4">
                                       <input type="checkbox" checked={editContentForm.isFree} onChange={(e) => setEditContentForm(prev => ({
@@ -781,11 +891,9 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
                                       <label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Is this content free?</label>
                                     </div>
                                   </>
-
                                 )}
                               </div>
                             )}
-
                           </div>
                         </div>
                       ))}
