@@ -135,7 +135,9 @@ const ShowCertificate = ({ courses }) => {
             const response = await axios.delete(
                 `${BaseUrl}/certificates/delete-certificate/${certificateId}`,
                 {
-                    headers: {
+                     data: { course_id: selectedCourse },
+                   headers: {
+                        'Content-Type': 'application/json',
                         'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
                     }
                 }
@@ -321,7 +323,7 @@ const ShowCertificate = ({ courses }) => {
                             </p>
                         </div>
                         <button
-                            onClick={() => handleDelete(selectedCourse)}
+                            onClick={() => handleDelete(certificates[0].id)}
                             disabled={isDeleting}
                             className="w-full sm:w-auto px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:bg-red-400 transition-colors"
                         >
@@ -630,7 +632,7 @@ const ShowCertificate = ({ courses }) => {
                     </p>
                 </div>
             )}
-        </div>
+        </div>   
     )
 }
 

@@ -539,7 +539,7 @@ const FileUploadArea = ({
                     onChange={onChange}
                     accept={accept}
                     className="hidden"
-                />
+                />      
 
                 {preview ? (
                     <div className="text-center">

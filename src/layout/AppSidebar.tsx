@@ -66,12 +66,7 @@ const studentItems: NavItem[] = [
   {
     icon: <PieChartIcon />,
     name: "Enrollment Management",
-    subItems: [
-      { name: "Category", path: "/category", pro: false },
-      { name: "Courses", path: "/bar-chart", pro: false },
-      { name: "Chapters", path: "/bar-chart", pro: false },
-
-    ],
+    path: "/enrollments",
   },
   {
     icon: <BoxCubeIcon />,
