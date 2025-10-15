@@ -1,5 +1,5 @@
 'use client'
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -16,7 +16,7 @@ import axios from "axios";
 import { BaseUrl } from "@/constents/serverBaseUrl";
 import ConfirmModal from '@/components/ui/modal/Confirmation'
 import Pagination from "./Pagination";
-export default function InstructorTable({ InstructorData,onPageChange,handleAction }) {
+export default function InstructorTable({ InstructorData, onPageChange, handleAction }) {
 
   const [openModal, setOpenModal] = useState(false)
   const [deleteId, setDeleteId] = useState();
@@ -37,9 +37,9 @@ export default function InstructorTable({ InstructorData,onPageChange,handleActi
     router.push(`/instructors/edit/${id}`);
   }
   const handleDelete = async (id) => {
-      setDeleteId(id)
-      setOpenModal(true)
-   
+    setDeleteId(id)
+    setOpenModal(true)
+
   }
 
 
@@ -66,7 +66,7 @@ export default function InstructorTable({ InstructorData,onPageChange,handleActi
   }
 
 
- 
+
   return (
     <>
       {openModal && <ConfirmModal handleYes={handleYes} handleNo={handleNo} />}
@@ -124,11 +124,12 @@ export default function InstructorTable({ InstructorData,onPageChange,handleActi
 
               {/* Table Body */}
               <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-                {InstructorData.status && InstructorData.data.length>0&& InstructorData.data.map((value, index) => (
+                {InstructorData.status && InstructorData.data.length > 0 && InstructorData.data.map((value, index) => (
                   <TableRow key={index}>
                     <TableCell className="px-5 py-4 sm:px-6 text-start">
-
-                      {index + 1}
+                      <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                        {index + 1}
+                      </span>
                     </TableCell>
                     <TableCell className="px-5 py-4 sm:px-6 text-start">
 
@@ -161,6 +162,7 @@ export default function InstructorTable({ InstructorData,onPageChange,handleActi
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                       {value.title}
                     </TableCell>
+ 
 
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                       {!value.deleted_at ? <Badge variant="solid" color="success">
@@ -183,7 +185,26 @@ export default function InstructorTable({ InstructorData,onPageChange,handleActi
                           </button>
                         </>
                         :
-                        <Image src={ResetIcon} width={20} height={20} alt="sf" style={{ cursor: "pointer" }} />
+                        <button
+                          className="p-2 text-blue-600 hover:text-blue-400 dark:text-blue-500 dark:hover:text-blue-300 transition-colors rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                          // onClick={() => handleRestore(value.id)}
+                          title="Restore Enrollment"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-5 h-5"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                            />
+                          </svg>
+                        </button>
                       }
                     </TableCell>
                   </TableRow>
@@ -194,7 +215,7 @@ export default function InstructorTable({ InstructorData,onPageChange,handleActi
           </div>
         </div>
         <div className="m-5 justify-items-end">
-          {InstructorData.status && InstructorData.pagination && InstructorData.pagination.totalPages >1 &&
+          {InstructorData.status && InstructorData.pagination && InstructorData.pagination.totalPages > 1 &&
             <Pagination totalPages={InstructorData.pagination.totalPages} currentPage={InstructorData.pagination.currentPage} onPageChange={onPageChange} />
           }
         </div>
@@ -204,3 +225,4 @@ export default function InstructorTable({ InstructorData,onPageChange,handleActi
     </>
   );
 }
+    

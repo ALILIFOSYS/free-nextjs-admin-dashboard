@@ -7,24 +7,19 @@ import Image from 'next/image';
 import { AWS_STUDENT_BASE_URL } from '@/constents/URLs'
 import { uploadImage } from '@/constents/uploadImage';
 const ShowCertificate = ({ courses }) => {
-    console.log(courses, "hfdsdghjk");
 
     const router = useRouter()
     const [selectedCourse, setSelectedCourse] = useState('')
     const [certificates, setCertificates] = useState([])
-    const [selectedCourseTitle, setSelectedCourseTitle] = useState('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
- const [isDeleting, setIsDeleting] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
     const handleCreate = () => {
         router.push('/certificates/create')
     }
 
-    // const handleEdit = (certificateId) => {
-    //     router.push(`/certificates/edit/${certificateId}`)
-    // }
-    console.log(selectedCourse,"select ed courses id");
-    
+
+
     const [formData, setFormData] = useState({
         certificate_title: '',
         certificate_short_text: '',
@@ -50,7 +45,6 @@ const ShowCertificate = ({ courses }) => {
     const handleFileUpload = useCallback(async (type, file) => {
         try {
             const uploadResponse = await uploadImage(file, "frame");
-            console.log(uploadResponse, "upload response");
 
             // Update form data with the new media ID
             if (type === 'template_image') {
@@ -99,7 +93,6 @@ const ShowCertificate = ({ courses }) => {
         }))
     }
     const handleImageChange = (e, imageType) => {
-        console.log("hi", e, imageType);
         const file = e.target.files[0];
         if (file) {
             if (file.size > 5 * 1024 * 1024) {
@@ -125,7 +118,7 @@ const ShowCertificate = ({ courses }) => {
             [imageType]: ''
         }))
     }
- const handleDelete = async (certificateId) => {
+    const handleDelete = async (certificateId) => {
         if (!window.confirm('Are you sure you want to delete this certificate?')) {
             return;
         }
@@ -135,8 +128,8 @@ const ShowCertificate = ({ courses }) => {
             const response = await axios.delete(
                 `${BaseUrl}/certificates/delete-certificate/${certificateId}`,
                 {
-                     data: { course_id: selectedCourse },
-                   headers: {
+                    data: { course_id: selectedCourse },
+                    headers: {
                         'Content-Type': 'application/json',
                         'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
                     }
@@ -198,24 +191,19 @@ const ShowCertificate = ({ courses }) => {
         }
     };
 
-    const handleCancel = () => {
-        router.push('/certificates')
-    }
+
     const handleCourseChange = async (e) => {
         const index = e.target.value
         if (!index) {
             setSelectedCourse('')
-            setSelectedCourseTitle('')
             setCertificates([])
             return
         }
 
-        console.log(index, "sfds");
         const { id, title } = courses[index]
         const Details = {
             id, title
         }
-        console.log(id, title, "sdfsd");
 
         setLoading(true)
         try {
@@ -225,7 +213,6 @@ const ShowCertificate = ({ courses }) => {
                     'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
                 }
             })
-            console.log(data, "data");
             if (data.data && data.data.length > 0) {
                 const certificate = data.data
                 setFormData({
@@ -247,7 +234,6 @@ const ShowCertificate = ({ courses }) => {
                 })
             }
             setSelectedCourse(id)
-            setSelectedCourseTitle(title)
             setCertificates(data.data || [])
         } catch (error) {
             console.error("Error fetching certificates:", error)
@@ -257,21 +243,7 @@ const ShowCertificate = ({ courses }) => {
         }
     }
 
-    const formatDate = (dateString) => {
-        return new Date(dateString).toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric'
-        })
-    }
-    console.log(certificates.length, "certificate length");
-
-    const getImageUrl = (path) => {
-        if (!path) return '/placeholder-image.png';
-        // console.log(`${AWS_STUDENT_BASE_URL}/${path}`,"dfs");
-
-        return `${AWS_STUDENT_BASE_URL}${path}`;
-    }
+  
 
     return (
         <div className="max-w-7xl mx-auto  sm:p-6 space-y-6">
@@ -632,7 +604,7 @@ const ShowCertificate = ({ courses }) => {
                     </p>
                 </div>
             )}
-        </div>   
+        </div>
     )
 }
 

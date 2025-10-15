@@ -10,8 +10,6 @@ const page = async () => {
             'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
         }
     })
-    console.log(data, "get Coures");
-
     return (
         <div>
             <CertificateConfigurator courses={data.data}/>

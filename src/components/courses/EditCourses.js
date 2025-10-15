@@ -1,5 +1,5 @@
 'use client'
-import  { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { BaseUrl } from "@/constents/serverBaseUrl";
@@ -20,7 +20,7 @@ export default function EditCourse({ categoryData, instructorData, courseData })
 
 
   // const [loading, setLoading] = useState(false);
-  // const [saving, setSaving] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
     id: courseData[0].id,
     media_id: courseData[0].media_id,
@@ -97,7 +97,7 @@ export default function EditCourse({ categoryData, instructorData, courseData })
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUploading(true)
-
+    setSaving(true)
 
     if (!formData.courseTitle.trim()) {
       alert('Please enter a course title');
@@ -179,13 +179,15 @@ export default function EditCourse({ categoryData, instructorData, courseData })
           'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
         }
       })
-console.log(res);
 
-      setUploading(false)
+      if (res) {
+        setSaving(false)
+        setUploading(false)
+      }
 
       alert('Course updated successfully!');
 
-       router.push('/courses')
+      router.push('/courses')
     } catch (error) {
       console.error('Submission error:', error);
       alert('Failed to create course. Please try again.');
@@ -286,12 +288,12 @@ console.log(res);
   }
   return (
     <div className="max-w mx-auto ">
-      <h1 className="text-2xl font-bold mb-6">Edit Course</h1>
+      <h1 className="text-2xl font-bold mb-6 text-gray-700 dark:text-gray-300">Edit Course</h1>
 
       <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
         <div className="grid grid-cols-1 gap-6 mb-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Thumbnail Image *
             </label>
             <div className="flex items-center space-x-4">
@@ -327,8 +329,8 @@ console.log(res);
               {selectedFile && !uploading && (
                 <div className="flex items-center space-x-2">
                   <Image
-                  width={50}
-                  height={50}
+                    width={50}
+                    height={50}
                     src={thumbnail}
                     alt="Thumbnail preview"
                     className="w-16 h-16 object-cover rounded-md"
@@ -375,7 +377,7 @@ console.log(res);
             </select>
           </div>
           <div className="">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Instructors *
             </label>
 
@@ -514,19 +516,20 @@ console.log(res);
         </div>
         {/* Description Section */}
         <div className="my-4" >
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Title
           </label>
           <input
             type="text"
+            id="descriptionTitle"
             name="descriptionTitle"
             value={formData.descriptionTitle}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder='Description title'
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            required
           />
         </div>
-        <label htmlFor="">Description</label>
+        <label htmlFor="" className="text-gray-700 dark:text-gray-300">Description</label>
         <div className="max-w-4xl mx-auto p-6 bg-white  shadow-md">
           {/* Toolbar */}
           <div className="flex flex-wrap gap-2 border-b pb-2 mb-3">
@@ -651,13 +654,13 @@ console.log(res);
           >
             Cancel
           </button>
-          {/* <button
+          <button
             type="submit"
             disabled={saving}
             className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
           >
             {saving ? 'Saving...' : 'Save & Update'}
-          </button> */}
+          </button>
         </div>
       </form>
     </div>

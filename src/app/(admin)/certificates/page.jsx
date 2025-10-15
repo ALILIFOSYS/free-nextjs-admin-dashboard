@@ -2,6 +2,7 @@ import React from 'react'
 import ShowCertificate from '@/components/certificate/ShowCertificate'
 import axios from 'axios'
 import { BaseUrl } from '@/constents/serverBaseUrl'
+import PageBreadcrumb from '@/components/common/PageBreadCrumb'
 const page = async () => {
 
     const {data} = await axios.get(`${BaseUrl}/courses/get-courses`, {
@@ -13,6 +14,7 @@ const page = async () => {
 
     return (
         <div>
+             <PageBreadcrumb pageTitle="Manage Certificate" />
             <ShowCertificate courses={data.data}/>
         </div>
     )

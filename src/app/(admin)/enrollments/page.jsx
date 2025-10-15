@@ -1,12 +1,16 @@
-import React from 'react'
-import EnrollmentTable from '@/components/tables/EnrollmentTable'
+import React, { Suspense } from 'react'
+import ShowEnrollments from '@/components/Enorllments/ShowEnrollment'
+import PageBreadcrumb from '@/components/common/PageBreadCrumb'
 
 const page = () => {
   return (
     <div>
-      <EnrollmentTable/>
+       <PageBreadcrumb pageTitle="Enrollments" />
+        <Suspense fallback={<div>Loading instructors...</div>}>
+      <ShowEnrollments/>
+        </Suspense>
     </div>
   )
 }
 
-export default page 
+export default page    

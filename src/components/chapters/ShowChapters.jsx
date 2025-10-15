@@ -20,7 +20,6 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
   const [editingContent, setEditingContent] = useState(null);
   const [editChapterForm, setEditChapterForm] = useState({});
   const [editContentForm, setEditContentForm] = useState({});
-  console.log(courseData, "courseData");
 
   const router = useRouter();
   const EditorToolbar = ({ editor }) => {
@@ -44,7 +43,6 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
       </div>
     );
   }
-  console.log(editContentForm, "editContentForm");
 
   const { course, analytics } = courseData;
   const { Chapters } = course;
@@ -63,17 +61,20 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
   };
 
   // Filter chapters based on search and content type
+  
   const filteredChapters = Chapters.filter(chapter => {
-    const matchesSearch = chapter.chapterTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      chapter.Contents.some(content =>
-        content.contentTitle.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-
-    const matchesContentFilter = contentFilter === 'all' ||
-      chapter.Contents.some(content => content.contentType === contentFilter);
-
-    return matchesSearch && matchesContentFilter;
-  });
+      if(Chapters.length>0 &&Chapters[0].chapterTitle){
+      const matchesSearch = chapter.chapterTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        chapter.Contents.some(content =>
+          content.contentTitle.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+  
+        const matchesContentFilter = contentFilter === 'all' ||
+        chapter.Contents.some(content => content.contentType === contentFilter);
+        
+        return matchesSearch && matchesContentFilter;
+      }
+    });
 
   // Delete Chapter Handler
   const handleDeleteChapter = async (chapter_id, chapterTitle) => {
@@ -85,7 +86,6 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
             'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
           }
         });
-        console.log(deleteChapter, "deleteChapter");
         if (deleteChapter.data.status) {
           // Success handling
         }
@@ -110,7 +110,6 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
 
   const handleSaveChapterEdit = async (chapterId) => {
     try {
-      console.log(chapterId, "fdsdfghjkkhf");
 
       const data = await axios.put(`${BaseUrl}/chapters/update-chapter/${chapterId}`, editChapterForm, {
         headers: {
@@ -118,7 +117,6 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
           'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
         }
       })
-      console.log(data, "gfdsdhj");
 
       setEditingChapter(null);
       setEditChapterForm({});
@@ -144,7 +142,6 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
             'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
           }
         });
-        console.log(deleteContent, "fdfghj");
         if (deleteContent.data.status) {
           // Success handling
         }
@@ -157,7 +154,6 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
 
   // Edit Content Handlers - UPDATED
   const handleEditContent = (content) => {
-    console.log(content, "lhfdsdfhjkl;");
     setEditingContent(content.id);
     if (content.contentType === 'quiz') {
       setEditContentForm({
@@ -190,7 +186,6 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
 
   // UPDATED: Fixed handleQuizOptionChange function
   const handleQuizOptionChange = (optionKey, field, value) => {
-    console.log(optionKey, field, value, "hehee");
        if (field === 'is_correct' && value === true) {
             // Uncheck all other options
             Object.keys(newOptions).forEach(key => {
@@ -235,7 +230,6 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
 
   const handleSaveContentEdit = async (contentId) => {
     try {
-      console.log(editContentForm, "jhgfg", contentId);
       
       // Prepare the data for API call
       const requestData = {
@@ -267,7 +261,6 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
         }
       });
       
-      console.log(data, "gfdsdhj");
       if (data.status) {
         setEditingContent(null);
         setEditContentForm({});
@@ -288,10 +281,8 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
   };
 
   const handleDocumentClick = (content) => {
-    console.log(content, "conste");
     if (content.contentType === 'document' && content.Media && content.Media.file_source) {
       const filePath = `${AWS_STUDENT_BASE_URL}${content.Media.file_source}`;
-      console.log(filePath, "path");
 
       // Validate it's an AWS S3 URL or secure URL
       if (isValidUrl(filePath)) {
@@ -308,13 +299,11 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
 
   const uploadDocument = async (file) => {
     const uploadResponse = await uploadImage(file, "chapters")
-    console.log(uploadResponse, "upload response");
     return uploadResponse
   }
 
   const handleFile = async (file) => {
     const media_id = await uploadDocument(file)
-    console.log(media_id);
     if (media_id) {
       setEditContentForm(prev => ({
         ...prev,

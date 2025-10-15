@@ -42,25 +42,26 @@ const coursesItems: NavItem[] = [
       { name: "Courses", path: "/courses", pro: false },
       { name: "Chapters", path: "/chapters", pro: false },
 
-    ],
-  },
-  {
-    icon: <BoxCubeIcon />,
-    name: "Exam Management",
-    subItems: [
-      { name: "Exam", path: "/alerts", pro: false },
-      { name: "Quiz", path: "/avatars", pro: false },
 
     ],
   },
-  {
-    icon: <PlugInIcon />,
-    name: "Coupen Management",
-    subItems: [
-      { name: "Sign In", path: "/signin", pro: false },
-      { name: "Sign Up", path: "/signup", pro: false },
-    ],
-  },
+  // {
+  //   icon: <BoxCubeIcon />,
+  //   name: "Exam Management",
+  //   subItems: [
+  //     { name: "Exam", path: "/alerts", pro: false },
+  //     { name: "Quiz", path: "/avatars", pro: false },
+
+  //   ],
+  // },
+  // {
+  //   icon: <PlugInIcon />,
+  //   name: "Coupen Management",
+  //   subItems: [
+  //     { name: "Sign In", path: "/signin", pro: false },
+  //     { name: "Sign Up", path: "/signup", pro: false },
+  //   ],
+  // },
 ]
 const studentItems: NavItem[] = [
   {
@@ -174,19 +175,20 @@ const AppSidebar: React.FC = () => {
           {nav.subItems ? (
             <button
               onClick={() => handleSubmenuToggle(index, menuType)}
-              className={`menu-item group  ${openSubmenu?.type === menuType && openSubmenu?.index === index
-                ? "menu-item-active"
-                : "menu-item-inactive"
-                } cursor-pointer ${!isExpanded && !isHovered
-                  ? "lg:justify-center"
-                  : "lg:justify-start"
-                }`}
+              className={`menu-item group ${
+                isMenuActive(nav) ? "menu-item-active" : "menu-item-inactive"
+              } ${
+                openSubmenu?.type === menuType && openSubmenu?.index === index
+                ? "bg-gray-100 dark:bg-gray-800"
+                : ""
+              } cursor-pointer ${
+                !isExpanded && !isHovered ? "lg:justify-center" : "lg:justify-start"
+              }`}
             >
               <span
-                className={` ${openSubmenu?.type === menuType && openSubmenu?.index === index
-                  ? "menu-item-icon-active"
-                  : "menu-item-icon-inactive"
-                  }`}
+                className={`${
+                  isMenuActive(nav) ? "menu-item-icon-active" : "menu-item-icon-inactive"
+                }`}
               >
                 {nav.icon}
               </span>
@@ -291,7 +293,13 @@ const AppSidebar: React.FC = () => {
   const subMenuRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   // const isActive = (path: string) => path === pathname;
-  const isActive = useCallback((path: string) => path === pathname, [pathname]);
+  const isActive = useCallback((path: string) => {
+    // Check if the current path starts with the menu path (for nested routes)
+    if (path === '/') {
+      return pathname === path;
+    }
+    return pathname.startsWith(path);
+  }, [pathname]);
 
   useEffect(() => {
     // Check if the current path matches any submenu item
@@ -303,7 +311,7 @@ const AppSidebar: React.FC = () => {
           nav.subItems.forEach((subItem) => {
             if (isActive(subItem.path)) {
               setOpenSubmenu({
-                type: menuType as "main" | "others",
+                type: menuType as "main" ,
                 index,
               });
               submenuMatched = true;
@@ -335,6 +343,14 @@ const AppSidebar: React.FC = () => {
       }
     }
   }, [openSubmenu]);
+
+  const isMenuActive = useCallback((nav: NavItem) => {
+    if (nav.path && isActive(nav.path)) return true;
+    if (nav.subItems) {
+      return nav.subItems.some(item => isActive(item.path));
+    }
+    return false;
+  }, [isActive]);
 
   const handleSubmenuToggle = (index: number, menuType: "main" | "others") => {
     setOpenSubmenu((prevOpenSubmenu) => {
@@ -411,7 +427,7 @@ const AppSidebar: React.FC = () => {
                   <HorizontaLDots />
                 )}
               </h2>
-              {renderMenuItems(dashItems, "main")}
+              {renderMenuItems(dashItems,"others")}
             </div>
 
             <div className="">
@@ -428,7 +444,7 @@ const AppSidebar: React.FC = () => {
                   <HorizontaLDots />
                 )}
               </h2>
-              {renderMenuItems(coursesItems, "others")}
+              {renderMenuItems(coursesItems, "main")}
             </div>
             <div className="">
               <h2
@@ -443,7 +459,7 @@ const AppSidebar: React.FC = () => {
 
                   <HorizontaLDots />
                 )}
-              </h2>
+              </h2>  
               {renderMenuItems(studentItems, "others")}
             </div>
              <div className="">

@@ -4,9 +4,15 @@ const nextConfig: NextConfig = {
 
   /* config options here */
     images: {
-    domains: [
-      'trailcourses.s3.ap-south-1.amazonaws.com', // Your S3 bucket domain
-      // Add other domains as needed
+    remotePatterns: [
+       {
+        protocol: 'https', // or 'http'
+        hostname: 'trailcourses.s3.ap-south-1.amazonaws.com', // Your S3 bucket domain
+        port: '',
+        pathname: '/**', // Use '**' to allow any path, or specify a path
+      },
+     
+     
     ],
   },
   webpack(config) {

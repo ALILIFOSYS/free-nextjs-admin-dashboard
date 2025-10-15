@@ -87,10 +87,8 @@ export default function CertificateConfigurator({ courses = [] }) {
     };
 
     const handleFileUpload = useCallback(async (type, file) => {
-        console.log(type, "type", file, "value");
 
         const uploadResponse = await uploadImage(file, "frame")
-        console.log(uploadResponse, "upload response");
         setCertificateData(prev => ({
             ...prev,
             [type]: uploadResponse,
@@ -164,17 +162,7 @@ export default function CertificateConfigurator({ courses = [] }) {
 
         try {
             // Prepare form data for file upload
-            const formData = new FormData();
-            console.log(certificateData, "certificate data");
-
-         
-
-            // Append files
-            // if (files.template) formData.append('template', files.template);
-            // if (files.siteLogo) formData.append('siteLogo', files.siteLogo);
-            // if (files.authorSignature) formData.append('authorSignature', files.authorSignature);
-
-            // Send to backend
+          
             const response = await axios.post(`${BaseUrl}/certificates/create-certificate`,certificateData , {
                 headers: {
                     'Content-Type': 'application/json',
@@ -182,7 +170,6 @@ export default function CertificateConfigurator({ courses = [] }) {
 
                 }
             });
-            console.log(response,"response");
             
 
             if (!response.data.status) {

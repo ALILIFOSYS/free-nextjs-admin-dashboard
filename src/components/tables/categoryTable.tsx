@@ -1,6 +1,6 @@
 "use client";
 
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import {
     Table,
     TableBody,
@@ -10,7 +10,7 @@ import {
 } from "../ui/table";
 
 import Badge from "../ui/badge/Badge";
-import { PencilIcon, ResetIcon, TrashBinIcon } from "@/icons";
+import { PencilIcon, TrashBinIcon } from "@/icons";
 import CreateCategory from "../courses/CreateCatergory";
 import axios from "axios";
 import { BaseUrl } from "@/constents/serverBaseUrl";
@@ -46,7 +46,7 @@ export default function CategoryTable({ getCategoryData }: { getCategoryData: Ca
     const [editIndex, setEditIndex] = useState<number | null>(0);
 
 
-    const router = useRouter()
+    const router = useRouter()   
 
     // const toggleVisibility = () => {
     //     if (window.pageYOffset > 300) {
@@ -71,6 +71,26 @@ export default function CategoryTable({ getCategoryData }: { getCategoryData: Ca
         setEditIndex(id);
 
     }
+    const handleRestore = async (id: number) => {
+        try {
+            const response = await axios.put(
+                `${BaseUrl}/courses/${id}/restore`,
+                {},
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+                    }
+                }
+            );
+
+            if (response.data.status) {
+                router.refresh()
+            }
+        } catch (error) {
+            console.error('Error restoring enrollment:', error);
+        }
+    };
     const handleDelete = async (id: number) => {
         try {
             // Logic to handle category deletion
@@ -84,7 +104,7 @@ export default function CategoryTable({ getCategoryData }: { getCategoryData: Ca
             if (deleteCategory.data.status) {
                 alert(deleteCategory.data.message);
                 router.refresh()
-            }
+            } 
         } catch (error) {
             console.error("Error deleting category:", error);
         }
@@ -103,8 +123,8 @@ export default function CategoryTable({ getCategoryData }: { getCategoryData: Ca
             </div>
 
             <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
-                <div className="max-w-full overflow-x-auto">
-                    <div className="min-w-[1102px]">
+                <div className="max-w ">
+                    <div className="">
                         <Table>
                             {/* Table Header */}
                             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
@@ -138,7 +158,7 @@ export default function CategoryTable({ getCategoryData }: { getCategoryData: Ca
                                         className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                                     >
                                         Status
-                                    </TableCell>
+                                    </TableCell>   
                                     <TableCell
                                         isHeader
                                         className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
@@ -168,13 +188,12 @@ export default function CategoryTable({ getCategoryData }: { getCategoryData: Ca
                                                 <Image
                                                     width={100}
                                                     height={100}
-                                                    src={value.media_src ?? "/default-thumbnail.png"}
-                                                    alt='sdf'
+                                                    src={value.media_src ?? "/images/logo/aiilab-dark.svg"}
+                                                    alt='Thumbnail'
                                                 />
                                             </div>
                                         </TableCell>
                                         <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400" >
-
                                             {value.title}
                                         </TableCell>
                                         <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
@@ -190,11 +209,30 @@ export default function CategoryTable({ getCategoryData }: { getCategoryData: Ca
                                                 </Badge>}
 
                                         </TableCell>
-
+      
                                         <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                                             {value && value.deleted_at ?
 
-                                                <Image src={ResetIcon} width={20} height={20} alt="sf" style={{ cursor: "pointer" }} />
+                                                <button
+                                                    className="p-2 text-blue-600 hover:text-blue-400 dark:text-blue-500 dark:hover:text-blue-300 transition-colors rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                                                    onClick={() => handleRestore(value.id)}
+                                                    title="Restore Enrollment"
+                                                >
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        strokeWidth={1.5}
+                                                        stroke="currentColor"
+                                                        className="w-5 h-5"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                                                        />
+                                                    </svg>
+                                                </button>
                                                 :
                                                 <>
                                                     <button className="p-2 text-gray-500 hover:text-gray-900 dark:hover:text-white/90" onClick={() => handleDelete(value.id)}>
@@ -203,7 +241,7 @@ export default function CategoryTable({ getCategoryData }: { getCategoryData: Ca
                                                     <button className="p-2 text-gray-500 hover:text-gray-900 dark:hover:text-white/90" onClick={() => handleEdit(index)}>
                                                         <PencilIcon />
                                                     </button>
-                                                </>
+                                                </>       
                                             }
                                         </TableCell>
                                     </TableRow>

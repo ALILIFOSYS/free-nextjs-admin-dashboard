@@ -108,7 +108,6 @@ export default function CreateChapters({ course_id, data }) {
     }, [chapters]);
     const uploadDocument = async (file) => {
         const uploadResponse = await uploadImage(file, "chapters")
-        console.log(uploadResponse, "upload response");
         return uploadResponse
     }
     const handleContentChange = useCallback(async (chapterIndex, contentIndex, field, value) => {
@@ -116,9 +115,7 @@ export default function CreateChapters({ course_id, data }) {
         const newContents = [...newChapters[chapterIndex].contents];
 
         if (field === 'file' && value) {
-            console.log(contentIndex, field, ",", value, ";;;;");
             const media_id = await uploadDocument(value)
-            console.log(media_id);
             if (media_id) {
 
                 newContents[contentIndex]['media_id'] = media_id;
@@ -247,11 +244,7 @@ export default function CreateChapters({ course_id, data }) {
                 }
             });
 
-            console.log(response);
-
-
             if (response.data.status) {
-                console.log('Course created successfully:');
                 alert('Course created successfully!');
                 router.push(`/chapters/${course_id}`)
             } else {
