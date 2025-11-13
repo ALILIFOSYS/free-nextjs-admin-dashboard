@@ -17,7 +17,7 @@ import { BaseUrl } from "@/constents/serverBaseUrl";
 import { Modal } from "../ui/modal";
 import { useModal } from "@/hooks/useModal";
 import ConfirmModal from '@/components/ui/modal/Confirmation'
-
+import { useSearchParams } from 'next/navigation';
 
 
 export default function ChapterTable({ data, course_id }) {
@@ -31,6 +31,11 @@ export default function ChapterTable({ data, course_id }) {
     const infoModal = useModal();
     const router = useRouter()
 
+  const searchParams = useSearchParams();
+//   const title = searchParams.get('title');
+ 
+//   console.log(title,"title");
+  
     const handleCreate = () => {
         router.push(`/chapters/create/${course_id}`)
     }

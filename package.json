@@ -34,6 +34,7 @@
     "axios": "^1.11.0",
     "flatpickr": "^4.6.13",
     "framer-motion": "^12.23.19",
+    "jose": "^6.1.0",
     "lucide-react": "^0.540.0",
     "next": "15.2.3",
     "react": "^19.0.0",

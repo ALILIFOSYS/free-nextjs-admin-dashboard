@@ -42,36 +42,32 @@ const coursesItems: NavItem[] = [
       { name: "Courses", path: "/courses", pro: false },
       { name: "Chapters", path: "/chapters", pro: false },
 
-    ],
-  },
-  {
-    icon: <BoxCubeIcon />,
-    name: "Exam Management",
-    subItems: [
-      { name: "Exam", path: "/alerts", pro: false },
-      { name: "Quiz", path: "/avatars", pro: false },
 
     ],
   },
-  {
-    icon: <PlugInIcon />,
-    name: "Coupen Management",
-    subItems: [
-      { name: "Sign In", path: "/signin", pro: false },
-      { name: "Sign Up", path: "/signup", pro: false },
-    ],
-  },
+  // {
+  //   icon: <BoxCubeIcon />,
+  //   name: "Exam Management",
+  //   subItems: [
+  //     { name: "Exam", path: "/alerts", pro: false },
+  //     { name: "Quiz", path: "/avatars", pro: false },
+
+  //   ],
+  // },
+  // {
+  //   icon: <PlugInIcon />,
+  //   name: "Coupen Management",
+  //   subItems: [
+  //     { name: "Sign In", path: "/signin", pro: false },
+  //     { name: "Sign Up", path: "/signup", pro: false },
+  //   ],
+  // },
 ]
 const studentItems: NavItem[] = [
   {
     icon: <PieChartIcon />,
     name: "Enrollment Management",
-    subItems: [
-      { name: "Category", path: "/category", pro: false },
-      { name: "Courses", path: "/bar-chart", pro: false },
-      { name: "Chapters", path: "/bar-chart", pro: false },
-
-    ],
+    path: "/enrollments",
   },
   {
     icon: <BoxCubeIcon />,
@@ -86,6 +82,16 @@ const instructorItems: NavItem[] = [
     name: "Instructor Management",
     path :"/instructors"
   }]
+const generalSettings : NavItem[]=[
+  {
+     icon: <PlugInIcon />,
+     name: "Settings Management",
+    subItems: [
+      { name: "General Settings", path: "/settings", pro: false },
+      { name: "Certificate Configaration", path: "/certificates", pro: false },
+    ],
+  }
+]
 const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
@@ -169,19 +175,20 @@ const AppSidebar: React.FC = () => {
           {nav.subItems ? (
             <button
               onClick={() => handleSubmenuToggle(index, menuType)}
-              className={`menu-item group  ${openSubmenu?.type === menuType && openSubmenu?.index === index
-                ? "menu-item-active"
-                : "menu-item-inactive"
-                } cursor-pointer ${!isExpanded && !isHovered
-                  ? "lg:justify-center"
-                  : "lg:justify-start"
-                }`}
+              className={`menu-item group ${
+                isMenuActive(nav) ? "menu-item-active" : "menu-item-inactive"
+              } ${
+                openSubmenu?.type === menuType && openSubmenu?.index === index
+                ? "bg-gray-100 dark:bg-gray-800"
+                : ""
+              } cursor-pointer ${
+                !isExpanded && !isHovered ? "lg:justify-center" : "lg:justify-start"
+              }`}
             >
               <span
-                className={` ${openSubmenu?.type === menuType && openSubmenu?.index === index
-                  ? "menu-item-icon-active"
-                  : "menu-item-icon-inactive"
-                  }`}
+                className={`${
+                  isMenuActive(nav) ? "menu-item-icon-active" : "menu-item-icon-inactive"
+                }`}
               >
                 {nav.icon}
               </span>
@@ -286,7 +293,13 @@ const AppSidebar: React.FC = () => {
   const subMenuRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   // const isActive = (path: string) => path === pathname;
-  const isActive = useCallback((path: string) => path === pathname, [pathname]);
+  const isActive = useCallback((path: string) => {
+    // Check if the current path starts with the menu path (for nested routes)
+    if (path === '/') {
+      return pathname === path;
+    }
+    return pathname.startsWith(path);
+  }, [pathname]);
 
   useEffect(() => {
     // Check if the current path matches any submenu item
@@ -298,7 +311,7 @@ const AppSidebar: React.FC = () => {
           nav.subItems.forEach((subItem) => {
             if (isActive(subItem.path)) {
               setOpenSubmenu({
-                type: menuType as "main" | "others",
+                type: menuType as "main" ,
                 index,
               });
               submenuMatched = true;
@@ -330,6 +343,14 @@ const AppSidebar: React.FC = () => {
       }
     }
   }, [openSubmenu]);
+
+  const isMenuActive = useCallback((nav: NavItem) => {
+    if (nav.path && isActive(nav.path)) return true;
+    if (nav.subItems) {
+      return nav.subItems.some(item => isActive(item.path));
+    }
+    return false;
+  }, [isActive]);
 
   const handleSubmenuToggle = (index: number, menuType: "main" | "others") => {
     setOpenSubmenu((prevOpenSubmenu) => {
@@ -406,7 +427,7 @@ const AppSidebar: React.FC = () => {
                   <HorizontaLDots />
                 )}
               </h2>
-              {renderMenuItems(dashItems, "main")}
+              {renderMenuItems(dashItems,"others")}
             </div>
 
             <div className="">
@@ -423,7 +444,7 @@ const AppSidebar: React.FC = () => {
                   <HorizontaLDots />
                 )}
               </h2>
-              {renderMenuItems(coursesItems, "others")}
+              {renderMenuItems(coursesItems, "main")}
             </div>
             <div className="">
               <h2
@@ -438,7 +459,7 @@ const AppSidebar: React.FC = () => {
 
                   <HorizontaLDots />
                 )}
-              </h2>
+              </h2>  
               {renderMenuItems(studentItems, "others")}
             </div>
              <div className="">
@@ -456,6 +477,22 @@ const AppSidebar: React.FC = () => {
                 )}
               </h2>
               {renderMenuItems(instructorItems, "others")}
+            </div>
+                 <div className="">
+              <h2
+                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${!isExpanded && !isHovered
+                  ? "lg:justify-center"
+                  : "justify-start"
+                  }`}
+              >
+                {isExpanded || isHovered || isMobileOpen ? (
+                  "GENERAL SETTINGS"
+                ) : (
+
+                  <HorizontaLDots />
+                )}
+              </h2>
+              {renderMenuItems(generalSettings, "others")}
             </div>
           </div>
         </nav>

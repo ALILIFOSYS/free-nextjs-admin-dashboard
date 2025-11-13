@@ -7,17 +7,18 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-
+  
 import Badge from "../ui/badge/Badge";
 import Image from "next/image";
-import { PencilIcon, ResetIcon, TrashBinIcon } from "@/icons";
+import { PencilIcon, TrashBinIcon } from "@/icons";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { BaseUrl } from "@/constents/serverBaseUrl";
+import { AWS_STUDENT_BASE_URL } from "@/constents/URLs";
 // import { useModal } from "@/hooks/useModal";
 
 
-interface Course {
+interface Course { 
   id: number;
   title: string;
   description: string;
@@ -30,11 +31,11 @@ interface Course {
   user_id: number;
   category_title: string;
   instructor_name: string;
-
+  media_src: string
 }
 
 export default function CoursesTable({ data }: { data: Course[] }) {
-  
+
   const router = useRouter()
 
   const handleCreate = () => {
@@ -44,9 +45,31 @@ export default function CoursesTable({ data }: { data: Course[] }) {
   const handleEdit = (id: number) => {
     router.push(`/courses/edit/${id}`);
   }
+  const handleRestore = async (id: number) => {
+    try {
+      const response = await axios.put(
+        `${BaseUrl}/courses/course/${id}/restore`,
+        {},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+          }
+        }
+      );
+
+      if (response.data.status) {
+        // Handle successful restoration
+        // Refresh your category list
+        router.refresh()
+      }
+    } catch (error) {
+      console.error('Error restoring category:', error);
+    }
+  };
   const handleDelete = async (id: number) => {
     try {
-      
+
       // Logic to handle category deletion
       const deleteCategory = await axios.delete(`${BaseUrl}/courses/delete-course/${id}`, {
         // You can show a confirmation dialog or perform the deletion here
@@ -55,7 +78,7 @@ export default function CoursesTable({ data }: { data: Course[] }) {
           'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
         }
       });
-      
+
       if (deleteCategory.data.status) {
         alert(deleteCategory.data.message);
         router.refresh()
@@ -69,7 +92,7 @@ export default function CoursesTable({ data }: { data: Course[] }) {
 
   return (
     <>
-     
+
       <div className="max-w ">
         <button className='px-3 py-1  border border-blue-500 text-blue-500 rounded hover:bg-blue-500 hover:text-white transition' onClick={handleCreate}>Create Courses +</button>
       </div>
@@ -96,7 +119,7 @@ export default function CoursesTable({ data }: { data: Course[] }) {
                     isHeader
                     className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                   >
-                    Free 
+                    Free
                   </TableCell>
                   <TableCell
                     isHeader
@@ -131,26 +154,27 @@ export default function CoursesTable({ data }: { data: Course[] }) {
                 {data.map((value, index) => (
                   <TableRow key={index}>
                     <TableCell className="px-5 py-4 sm:px-6 text-start">
-
-                      {index + 1}
+                      <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                        {index + 1}
+                      </span>
                     </TableCell>
                     <TableCell className="px-5 py-4 sm:px-6 text-start">
 
                       <div className="flex items-center">
-                        <div className=" overflow-hidden rounded-full">
+                        <div className=" overflow-hidden rounded">
                           <Image
-                            width={80}
-                            height={80}
-                            src='/images/logo/auth-logo.svg'
+                            width={50}
+                            height={50}
+                            src={value.media_src ?`${AWS_STUDENT_BASE_URL}${value.media_src}`: '/images/logo/auth-logo.svg'}
                             alt="fds"
                           />
                         </div>
                         <div>
-                          <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                            <div style={{ cursor: "pointer" }}>
+                          <span className=" mx-3 block font-medium text-gray-800 text-theme-sm dark:text-white/90">
 
-                              {value.title}
-                            </div>
+
+                            {value.title}
+
                           </span>
 
                         </div>
@@ -194,7 +218,7 @@ export default function CoursesTable({ data }: { data: Course[] }) {
                       {value && value.is_active ?
 
                         <>
-                          <button className="p-2 text-gray-500 hover:text-gray-900 dark:hover:text-white/90" onClick={()=>handleDelete(value.id)}>
+                          <button className="p-2 text-gray-500 hover:text-gray-900 dark:hover:text-white/90" onClick={() => handleDelete(value.id)}>
                             <TrashBinIcon />
                           </button>
                           <button className="p-2 text-gray-500 hover:text-gray-900 dark:hover:text-white/90" onClick={() => handleEdit(value.id)}>
@@ -202,7 +226,26 @@ export default function CoursesTable({ data }: { data: Course[] }) {
                           </button>
                         </>
                         :
-                        <Image src={ResetIcon} width={20} height={20} alt="sf" style={{ cursor: "pointer" }} />
+                        <button
+                          className="p-2 text-blue-600 hover:text-blue-400 dark:text-blue-500 dark:hover:text-blue-300 transition-colors rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                          onClick={() => handleRestore(value.id)}
+                          title="Restore Enrollment"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="w-5 h-5"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                            />
+                          </svg>
+                        </button>
                       }
                     </TableCell>
                   </TableRow>
@@ -215,4 +258,4 @@ export default function CoursesTable({ data }: { data: Course[] }) {
       </div>
     </>
   );
-}
+}    

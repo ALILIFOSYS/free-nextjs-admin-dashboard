@@ -14,7 +14,7 @@ const page = async () => {
     })
     return response.data
   }
-
+    
   const getCategoryData = await getCategory()
 
   return (

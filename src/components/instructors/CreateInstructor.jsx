@@ -3,7 +3,7 @@
 "use client";
 
 import { BaseUrl } from '@/constents/serverBaseUrl';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FiUser, FiMail, FiPhone, FiLock, FiImage, FiShield,FiInfo } from 'react-icons/fi';
 import { uploadImage } from '@/constents/uploadImage'
 import { encoder } from '@/constents/encoder'
@@ -26,6 +26,8 @@ export default function CreateInstructor() {
     const [profilePicture, setProfilePicture] = useState(null);
     const [previewUrl, setPreviewUrl] = useState('');
     const [error, setError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [toast, setToast] = useState({ visible: false, message: '', type: 'error' });
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -51,8 +53,11 @@ export default function CreateInstructor() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            setIsSubmitting(true);
             if (formData.password !== formData.confirmPassword) {
                 setError('Passwords do not match.');
+                setToast({ visible: true, message: 'Passwords do not match.', type: 'error' });
+                setIsSubmitting(false);
                 return;
             }
             setError('');
@@ -77,24 +82,48 @@ export default function CreateInstructor() {
             }
 
             const { data } = await axios.post(`${BaseUrl}/instructors/create-instructor`, dataToSubmit, {
+                // Let the browser set Content-Type for FormData (multipart/form-data)
                 headers: {
-                    'Content-Type': 'application/json',
                     'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
                 }
             })
-            if(data.status){
+            if (data.status) {
                 router.push('/instructors')
+            } else {
+                setToast({ visible: true, message: data.message || 'Failed to create instructor', type: 'error' });
             }
 
             // alert('Student creation form submitted! Check the console for the data.');
         } catch (error) {
             console.log(error);
-
+            const msg = error?.response?.data?.message || error.message || 'Something went wrong';
+            setToast({ visible: true, message: msg, type: 'error' });
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
+    // Auto-hide toast after 4 seconds
+    useEffect(() => {
+        let timer;
+        if (toast.visible) {
+            timer = setTimeout(() => setToast({ ...toast, visible: false }), 4000);
+        }
+        return () => clearTimeout(timer);
+    }, [toast]);
+
     return (
         <div className=" bg-gray-100 dark:bg-gray-900 flex items-center justify-center ">
+            {/* Toast */}
+            {toast.visible && (
+                <div className={`fixed top-6 right-6 z-50 max-w-sm w-full ${toast.type === 'error' ? 'bg-red-600' : 'bg-green-600'} text-white rounded shadow-lg p-3`}> 
+                    <div className="flex items-start gap-2">
+                        <div className="flex-1 text-sm">{toast.message}</div>
+                        <button onClick={() => setToast({ ...toast, visible: false })} className="ml-2 text-white/80 hover:text-white">✕</button>
+                    </div>
+                </div>
+            )}
+
             <div className="w-full bg-white dark:bg-gray-800 p-8 rounded space-y-6">
                 <h1 className="text-3xl font-bold text-center text-gray-900 dark:text-white">
                     Create New Instructor
@@ -214,7 +243,7 @@ export default function CreateInstructor() {
                                 placeholder="Confirm Password"
                                 value={formData.confirmPassword}
                                 onChange={handleChange}
-                            />
+                            />  
                         </div>
                     </div>
 
@@ -226,9 +255,20 @@ export default function CreateInstructor() {
                     <div className='flex justify-center '>
                         <button
                             type="submit"
-                            className="w-50 flex justify-center  py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800 transition-colors duration-300"
+                            disabled={isSubmitting}
+                            className={`w-50 flex items-center justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white ${isSubmitting ? 'bg-blue-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800 transition-colors duration-300`}
                         >
-                            Create Student
+                            {isSubmitting ? (
+                                <>
+                                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                                    </svg>
+                                    Creating...
+                                </>
+                            ) : (
+                                'Create Instructor'
+                            )}
                         </button>
                     </div>
                 </form>

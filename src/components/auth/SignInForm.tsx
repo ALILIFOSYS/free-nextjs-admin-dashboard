@@ -8,19 +8,19 @@ import { EyeCloseIcon, EyeIcon } from "@/icons";
 import axios from "axios";
 
 import { useRouter } from "next/navigation";
-import React, {  useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   // const [isChecked, setIsChecked] = useState(false);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-const router = useRouter();
+  const router = useRouter();
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     const email = emailRef.current?.value;
     const password = passwordRef.current?.value;
-  
+
 
     // Basic valeidation
     if (!email || !password) {
@@ -28,21 +28,21 @@ const router = useRouter();
       return;
     }
     const Logindata = { email, password }
-    const {data} = await axios.post(`${BaseUrl}/dashboard/login`, Logindata, {
+    const { data } = await axios.post(`${BaseUrl}/dashboard/login`, Logindata, {
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
       }
     })
 
-    if(data.token){
+    if (data.token) {
       localStorage.setItem("AuthToken", data.token);
       localStorage.setItem("userEmail", data.email);
-      localStorage.setItem("userName", data.name);  
+      localStorage.setItem("userName", data.name);
       localStorage.setItem("userRole", data.role);
       router.push('/')
     }
-  } 
+  }
 
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full">

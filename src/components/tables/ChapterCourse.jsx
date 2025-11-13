@@ -1,4 +1,5 @@
 'use client'
+import { AWS_STUDENT_BASE_URL } from "@/constents/URLs";
 import {
     Table,
     TableBody,
@@ -79,16 +80,16 @@ export default function ChapterCoursesTable({ data }) {
                                         <TableCell className="px-5 py-4 sm:px-6 text-start">
 
                                             <div className="flex items-center">
-                                                <div className=" overflow-hidden rounded-full">
+                                                <div className=" overflow-hidden rounded">
                                                     <Image
-                                                        width={80}
-                                                        height={80}
-                                                        src='/images/logo/auth-logo.svg'
+                                                        width={50}
+                                                        height={50}
+                                                        src={`${AWS_STUDENT_BASE_URL}${value.media_src}`}
                                                         alt="fds"
                                                     />
                                                 </div>
                                                 <div>
-                                                    <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                                                    <span className="block mx-2 font-medium text-gray-800 text-theme-sm dark:text-white/90">
                                                         <div style={{ cursor: "pointer" }}>
 
                                                             { value.title}
@@ -111,7 +112,7 @@ export default function ChapterCoursesTable({ data }) {
 
                                         <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                                             <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                                            onClick={()=>handleChapter(value.id)}
+                                            onClick={()=>handleChapter(value.id,value.title)}
                                             >
                                                 View Chapters
                                             </button>
