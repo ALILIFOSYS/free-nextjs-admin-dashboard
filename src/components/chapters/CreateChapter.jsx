@@ -64,6 +64,7 @@ const TextEditorComponent = ({ content, onChange }) => {
 
 // --- Main Component ---
 export default function CreateChapters({ course_id, data }) {
+    
     const title = data.course_title
     const router = useRouter()
     // UPDATED: Added new quiz fields

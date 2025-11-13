@@ -19,6 +19,7 @@ const ShowCertificate = ({ courses }) => {
     }
 
 
+const data = courses.filter((value=> value.deleted_at ==null))
 
     const [formData, setFormData] = useState({
         certificate_title: '',
@@ -272,13 +273,13 @@ const ShowCertificate = ({ courses }) => {
                     disabled={loading}
                 >
                     <option value="">Select a course</option>
-                    {courses.length > 0 && courses.map((value, index) => (
+                    {courses.length > 0 && courses.filter((value=> value.deleted_at ==null)).map((value, index) => (
                         <option value={index} key={index}>{value.title}</option>
                     ))}
                 </select>
                 {loading && (
                     <p className="text-sm text-blue-600 dark:text-blue-400 mt-2">Loading certificates...</p>
-                )}
+                )} 
             </div>
 
 

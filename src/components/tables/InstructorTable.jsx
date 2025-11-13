@@ -16,6 +16,7 @@ import axios from "axios";
 import { BaseUrl } from "@/constents/serverBaseUrl";
 import ConfirmModal from '@/components/ui/modal/Confirmation'
 import Pagination from "./Pagination";
+import { AWS_STUDENT_BASE_URL } from "@/constents/URLs";
 export default function InstructorTable({ InstructorData, onPageChange, handleAction }) {
 
   const [openModal, setOpenModal] = useState(false)
@@ -134,16 +135,16 @@ export default function InstructorTable({ InstructorData, onPageChange, handleAc
                     <TableCell className="px-5 py-4 sm:px-6 text-start">
 
                       <div className="flex items-center">
-                        <div className=" overflow-hidden rounded-full">
+                        <div className=" overflow-hidden rounded">
                           <Image
-                            width={80}
-                            height={80}
-                            src='/images/logo/auth-logo.svg'
+                            width={50}
+                            height={50}
+                            src={`${AWS_STUDENT_BASE_URL}${value.img_url}`}
                             alt="fds"
                           />
                         </div>
                         <div>
-                          <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                          <span className="block mx-2 font-medium text-gray-800 text-theme-sm dark:text-white/90">
                             <div style={{ cursor: "pointer" }}>
 
                               {value.name}

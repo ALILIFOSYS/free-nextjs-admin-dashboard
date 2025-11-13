@@ -108,7 +108,7 @@ export default function EditCategory({ category, CloseModal }: CategoryTableProp
         const uploadResult = await uploadToS3();
         if (uploadResult && typeof uploadResult === 'object' && 'imageUrl' in uploadResult && 'fileType' in uploadResult) {
           const { imageUrl, fileType } = uploadResult;
-          const { data } = await axios.put(
+         await axios.put(
             `${BaseUrl}/medias/update-media`,
             {
               src: imageUrl,
@@ -120,9 +120,8 @@ export default function EditCategory({ category, CloseModal }: CategoryTableProp
                 'Content-Type': 'application/json',
                 'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
               }
-            }
+            }   
           );
-          console.log(data);
           
         }
 
@@ -138,13 +137,13 @@ export default function EditCategory({ category, CloseModal }: CategoryTableProp
         media_src,
       };
 
-      const updateCategory = await axios.put(`${BaseUrl}/courses/update-category`, formData, {
+       await axios.put(`${BaseUrl}/courses/update-category`, formData, {
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
         }
       });
-      console.log(updateCategory);
+      // console.log(updateCategory);
       
       CloseModal();
       alert('Category updated successfully!');

@@ -31,6 +31,12 @@ export default function CertificateConfigurator({ courses = [] }) {
         authorSignature: '',
     });
 
+    const [uploadProgress, setUploadProgress] = useState({
+        template: null,
+        siteLogo: null,
+        authorSignature: null,
+    });
+
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isCourseDropdownOpen, setIsCourseDropdownOpen] = useState(false);
 
@@ -87,25 +93,44 @@ export default function CertificateConfigurator({ courses = [] }) {
     };
 
     const handleFileUpload = useCallback(async (type, file) => {
-
-        const uploadResponse = await uploadImage(file, "frame")
-        setCertificateData(prev => ({
-            ...prev,
-            [type]: uploadResponse,
-        }));
-        // return uploadResponse
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            setPreviews(prev => ({
-                ...prev,
-                [type]: e.target?.result,
-            }));
+        const onUploadProgress = (progressEvent) => {
+            if (progressEvent.total) {
+                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                setUploadProgress(prev => ({
+                    ...prev,
+                    [type]: percentCompleted,
+                }));
+            }
         };
-        reader.readAsDataURL(file);
-        setFiles(prev => ({
-            ...prev,
-            [type]: file,
-        }));
+
+        try {
+            const uploadResponse = await uploadImage(file, "frame", onUploadProgress);
+            setCertificateData(prev => ({
+                ...prev,
+                [type]: uploadResponse,
+            }));
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setPreviews(prev => ({
+                    ...prev,
+                    [type]: e.target.result,
+                }));
+            };
+            reader.readAsDataURL(file);
+            setFiles(prev => ({
+                ...prev,
+                [type]: file,
+            }));
+        } catch (error) {
+            console.error("Upload failed:", error);
+            alert('Image upload failed. Please try again.');
+        } finally {
+            setUploadProgress(prev => ({
+                ...prev,
+                [type]: null, // Reset progress after upload finishes or fails
+            }));
+        }
     }, []);
 
     const handleFileChange = (type, event) => {
@@ -253,6 +278,7 @@ export default function CertificateConfigurator({ courses = [] }) {
                                 ref={fileInputRefs.template}
                                 onChange={(e) => handleFileChange('template', e)}
                                 hasFile={!!files.template}
+                                progress={uploadProgress.template}
                             />
                         </Section>
 
@@ -306,7 +332,7 @@ export default function CertificateConfigurator({ courses = [] }) {
                                                     </div>
                                                 </div>
                                                 <div className="p-2 space-y-1">
-                                                    {courses.map(course => (
+                                                    {courses.filter(value => value.deleted_at == null).map(course => (
                                                         <label
                                                             key={course.id}
                                                             className="flex items-center space-x-2 p-2 hover:bg-gray-100 dark:hover:bg-gray-600 rounded cursor-pointer"
@@ -398,6 +424,7 @@ export default function CertificateConfigurator({ courses = [] }) {
                                     onChange={(e) => handleFileChange('siteLogo', e)}
                                     compact
                                     hasFile={!!files.siteLogo}
+                                    progress={uploadProgress.siteLogo}
                                 />
 
                                 <FileUploadArea
@@ -412,6 +439,7 @@ export default function CertificateConfigurator({ courses = [] }) {
                                     onChange={(e) => handleFileChange('authorSignature', e)}
                                     compact
                                     hasFile={!!files.authorSignature}
+                                    progress={uploadProgress.authorSignature}
                                 />
                             </div>
 
@@ -483,6 +511,7 @@ const FileUploadArea = ({
     accept,
     compact = false,
     hasFile = false,
+    progress = null,
     ref
 }) => {
     const getUploadText = () => {
@@ -561,6 +590,15 @@ const FileUploadArea = ({
                     </div>
                 )}
             </div>
+
+            {progress !== null && progress < 100 ? (
+                <div className="mt-2">
+                    <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                        <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${progress}%` }}></div>
+                    </div>
+                    <p className="text-xs text-center mt-1 text-gray-500">{progress}% uploaded</p>
+                </div>
+            ) : null}
 
             {hasFile && (
                 <button

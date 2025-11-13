@@ -71,7 +71,7 @@ export default function CategoryTable({ getCategoryData }: { getCategoryData: Ca
         setEditIndex(id);
 
     }
-    const handleRestore = async (id: number) => {
+    const handleRestore = async (id: number) => {    
         try {
             const response = await axios.put(
                 `${BaseUrl}/courses/${id}/restore`,
@@ -81,7 +81,7 @@ export default function CategoryTable({ getCategoryData }: { getCategoryData: Ca
                         'Content-Type': 'application/json',
                         'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
                     }
-                }
+                }        
             );
 
             if (response.data.status) {
@@ -99,7 +99,7 @@ export default function CategoryTable({ getCategoryData }: { getCategoryData: Ca
                 headers: {
                     'Content-Type': 'application/json',
                     'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
-                }
+                }  
             });
             if (deleteCategory.data.status) {
                 alert(deleteCategory.data.message);

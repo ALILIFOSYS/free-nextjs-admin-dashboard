@@ -112,9 +112,7 @@ export default function EditStudent({ studentData }) {
 
     useEffect(() => {
         if(!studentData) setLoading(true)
-        if (studentData[0].media_id) {
-            studentData[0].src = "Users/1758104205932_mee.jpg"
-        }
+       
 
         setExistingImageUrl(studentData[0].media_id ? studentData[0].src : "");
     }, []);

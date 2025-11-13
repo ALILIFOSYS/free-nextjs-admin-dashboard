@@ -54,7 +54,7 @@ export default function StudentTable({ EnrollmentData, onPageChange, handleActio
   };
   const handleYes = async () => {
     try {
-      console.log(selectedId, "sdfs");
+      // console.log(selectedId, "sdfs");
 
       let endpoint = actionType === 'delete'
         ? `${BaseUrl}/enrollments/block-enrollment/${selectedId}`
@@ -85,7 +85,7 @@ export default function StudentTable({ EnrollmentData, onPageChange, handleActio
   }
 
 
-  console.log(EnrollmentData);
+  // console.log(EnrollmentData);
 
   return (
     <>

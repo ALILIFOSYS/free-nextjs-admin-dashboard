@@ -103,7 +103,6 @@ export default function EditInstructor({ InstructorData }) {
                 'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
             }
         }) 
-            console.log(data, "res");
 if(data.status){
 
     router.push('/instructors')
@@ -116,11 +115,9 @@ if(data.status){
 
     useEffect(() => {
         if (!InstructorData) setLoading(true)
-        if (InstructorData[0].media_id) {
-            InstructorData[0].src = "Users/1758104205932_mee.jpg"
-        }
+     
 
-        setExistingImageUrl(InstructorData[0].media_id ? InstructorData[0].src : "");
+        setExistingImageUrl(InstructorData[0].img_url ? InstructorData[0].img_url : "");
     }, []);
     if (loading) {
         return (
@@ -144,7 +141,7 @@ if(data.status){
                             Profile Picture
                         </label>
                         <div className="relative w-32 h-32">
-                            {InstructorData[0].media_id &&
+                            {InstructorData[0].img_url &&
                                 <img
                                     src={`${AWS_STUDENT_BASE_URL}${existingImageUrl}`}
                                     alt="Profile Preview"

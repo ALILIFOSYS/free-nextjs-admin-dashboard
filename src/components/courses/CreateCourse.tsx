@@ -13,7 +13,7 @@ import Image from 'next/image';
 // Define TypeScript interfaces
 interface Instructor {
   id: number;
-  instructor_name: string;
+  name: string;
 }
 interface Category {
   id: number;
@@ -59,13 +59,14 @@ const CourseCreationForm = ({ categoryData, instructorData }: { categoryData: Ca
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [thumbnail, setThumbnail] = useState<string>('')
   // Handle form input changes
+  
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
 
     if (name == 'categoryName') {
       setFormData(prev => ({
         ...prev,
-        category_id: parseInt(value),
+        category_id: categoryOptions[parseInt(value)].id,
         categoryName: categoryOptions[parseInt(value)].title
       }))
       return
@@ -243,13 +244,12 @@ const CourseCreationForm = ({ categoryData, instructorData }: { categoryData: Ca
       
      formData.media_id=mediaId
 
-      const res = await axios.post(`${BaseUrl}/courses/create-course`, formData, {
+       await axios.post(`${BaseUrl}/courses/create-course`, formData, {
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
         }
       })
-    console.log(res);
     
       setUploading(false)
 
@@ -275,7 +275,9 @@ const CourseCreationForm = ({ categoryData, instructorData }: { categoryData: Ca
         fileInputRef.current.value = '';
       }
 editor?.commands.clearContent()
-    } catch (error) {
+    } catch (error) { 
+      setUploading(false)
+
       console.error('Submission error:', error);
       alert('Failed to create course. Please try again.');
     }
@@ -284,7 +286,7 @@ editor?.commands.clearContent()
   // Get selected instructor names
   const selectedInstructorNames = formData.instructors.map(id => {
     const instructor = instructorOptions.find(inst => inst.id === id);
-    return instructor ? instructor.instructor_name : '';
+    return instructor ? instructor.name : '';
   });
   const editor = useEditor({
     immediatelyRender: false,
@@ -410,8 +412,8 @@ editor?.commands.clearContent()
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select a category</option>
-              {categoryOptions.map(category => (
-                <option key={category.id} value={category.id}>
+              {categoryOptions.map((category,index) => (
+                <option key={index} value={index}>
                   {category.title}
                 </option>
               )
@@ -487,7 +489,7 @@ editor?.commands.clearContent()
                         )}
                       </div>
                       {/* <span className="mr-2 text-lg">{instructor.avatar}</span> */}
-                      <span>{instructor.instructor_name}</span>
+                      <span>{instructor.name}</span>
                     </div>
                   ))}
                 </div>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BaseUrl } from "./serverBaseUrl";
 
-const uploadToS3 = async (file, folder) => {
+const uploadToS3 = async (file, folder, onUploadProgress) => {
 
   if (!file) return null;
 
@@ -27,6 +27,7 @@ const uploadToS3 = async (file, folder) => {
       headers: {
         'Content-Type': file.type,
       },
+      onUploadProgress
     });
 
    if(uploadResponse.status){
@@ -39,8 +40,8 @@ return
   }
 };
 
-export const uploadImage = async (file, folder) => {
-  const res = await uploadToS3(file, folder)
+export const uploadImage = async (file, folder, onUploadProgress) => {
+  const res = await uploadToS3(file, folder, onUploadProgress)
   if (res) {
     
  const { imageUrl, fileType } = res;

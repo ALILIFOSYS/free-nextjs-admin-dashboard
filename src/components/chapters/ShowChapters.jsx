@@ -13,6 +13,7 @@ import Link from '@tiptap/extension-link';
 import { uploadImage } from '@/constents/uploadImage';
 
 const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDelete, onContentEdit }) => {
+  
   const [expandedChapters, setExpandedChapters] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
   const [contentFilter, setContentFilter] = useState('all');
@@ -57,7 +58,7 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
 
   // Create new chapter
   const handleCreateChapter = () => {
-    router.push(`/chapters/create/${course.id}`);
+    router.push(`/chapters/create/${course.id}?title=${course.title}`);
   };
 
   // Filter chapters based on search and content type

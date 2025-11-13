@@ -7,17 +7,18 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-
+  
 import Badge from "../ui/badge/Badge";
 import Image from "next/image";
 import { PencilIcon, TrashBinIcon } from "@/icons";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { BaseUrl } from "@/constents/serverBaseUrl";
+import { AWS_STUDENT_BASE_URL } from "@/constents/URLs";
 // import { useModal } from "@/hooks/useModal";
 
 
-interface Course {
+interface Course { 
   id: number;
   title: string;
   description: string;
@@ -30,7 +31,7 @@ interface Course {
   user_id: number;
   category_title: string;
   instructor_name: string;
-
+  media_src: string
 }
 
 export default function CoursesTable({ data }: { data: Course[] }) {
@@ -160,16 +161,16 @@ export default function CoursesTable({ data }: { data: Course[] }) {
                     <TableCell className="px-5 py-4 sm:px-6 text-start">
 
                       <div className="flex items-center">
-                        <div className=" overflow-hidden rounded-full">
+                        <div className=" overflow-hidden rounded">
                           <Image
-                            width={80}
-                            height={80}
-                            src='/images/logo/auth-logo.svg'
+                            width={50}
+                            height={50}
+                            src={value.media_src ?`${AWS_STUDENT_BASE_URL}${value.media_src}`: '/images/logo/auth-logo.svg'}
                             alt="fds"
                           />
                         </div>
                         <div>
-                          <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                          <span className=" mx-3 block font-medium text-gray-800 text-theme-sm dark:text-white/90">
 
 
                             {value.title}
@@ -192,7 +193,7 @@ export default function CoursesTable({ data }: { data: Course[] }) {
                           /> */}
                           {value.is_free ? <Badge variant="solid" color="success">free</Badge> : <Badge variant="solid" color="error">Premium</Badge>}
                           {/* <span className="ml-2 text-sm font-medium text-gray-700"> Approve and Publish</span> */}
-                        </label> 
+                        </label>
                       </div>
                     </TableCell>
                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
@@ -224,12 +225,12 @@ export default function CoursesTable({ data }: { data: Course[] }) {
                             <PencilIcon />
                           </button>
                         </>
-                        :   
+                        :
                         <button
                           className="p-2 text-blue-600 hover:text-blue-400 dark:text-blue-500 dark:hover:text-blue-300 transition-colors rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20"
                           onClick={() => handleRestore(value.id)}
                           title="Restore Enrollment"
-                        >  
+                        >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
@@ -237,8 +238,8 @@ export default function CoursesTable({ data }: { data: Course[] }) {
                             strokeWidth={1.5}
                             stroke="currentColor"
                             className="w-5 h-5"
-                          >   
-                            <path   
+                          >
+                            <path
                               strokeLinecap="round"
                               strokeLinejoin="round"
                               d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"

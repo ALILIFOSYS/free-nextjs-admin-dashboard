@@ -10,14 +10,13 @@ import Link from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
 import { Bold, Italic, Strikethrough, List, ListOrdered, Quote, Code, Undo2, Redo2, Heading1, Heading2, Heading3 } from "lucide-react";
 import Image from "next/image";
+import { AWS_STUDENT_BASE_URL } from "@/constents/URLs";
 
 
 
 
 export default function EditCourse({ categoryData, instructorData, courseData }) {
   const router = useRouter();
-
-
 
   // const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -338,9 +337,21 @@ export default function EditCourse({ categoryData, instructorData, courseData })
                   <span className="text-sm text-green-600">✓ Uploaded</span>
                 </div>
               )}
+              {courseData[0].media_id &&!selectedFile&& (
+                <div className="flex items-center space-x-2">
+                  <Image
+                    width={50}
+                    height={50}
+                    src={`${AWS_STUDENT_BASE_URL}${courseData[0].media_src}`}
+                    alt="Thumbnail preview"
+                    className="w-16 h-16 object-cover rounded-md"
+                  />
+                  <span className="text-sm text-green-600">✓ Uploaded</span>
+                </div>
+              )}
             </div>
           </div>
-          <div>
+          <div>    
             <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Course Title
             </label>

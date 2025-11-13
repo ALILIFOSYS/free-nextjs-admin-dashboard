@@ -23,12 +23,12 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
 const [name, setName] = useState<string | null>("");
 
   useEffect(()=>{
-    const email = localStorage.getItem("userEmail");
+    // const email = localStorage.getItem("userEmail");
     const userName = localStorage.getItem("userName");
-    const role = localStorage.getItem("userRole");
-    if (email && name && role) {
-      console.log("User Info:", { email, userName, role });
-    }
+    // const role = localStorage.getItem("userRole");
+    // if (email && name && role) {
+    //   // console.log("User Info:", { email, userName, role });
+    // }
     setName(userName);
   },[name])
   return (

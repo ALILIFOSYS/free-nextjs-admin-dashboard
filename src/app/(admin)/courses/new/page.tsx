@@ -13,7 +13,7 @@ const page = async () => {
         'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
       }
     });
-    return res.data
+    return res.data.data
   }
   const getCategory = async () => {
     const res = await axios.get(`${BaseUrl}/courses/get-category`, {

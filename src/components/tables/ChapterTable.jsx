@@ -32,9 +32,9 @@ export default function ChapterTable({ data, course_id }) {
     const router = useRouter()
 
   const searchParams = useSearchParams();
-  const title = searchParams.get('title');
+//   const title = searchParams.get('title');
  
-  console.log(title,"title");
+//   console.log(title,"title");
   
     const handleCreate = () => {
         router.push(`/chapters/create/${course_id}`)

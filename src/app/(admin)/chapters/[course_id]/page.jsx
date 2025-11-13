@@ -5,8 +5,8 @@ import axios from 'axios';
 // import ChapterTable from '@/components/tables/ChapterTable'
 import ChapterTable from '@/components/chapters/ShowChapters'
 
-const course_id =async ({params}) => {
-  
+const course_id =async ({params}) => { 
+   
    const { course_id } =await params
  const getChapter = async () => {
     const res = await axios.get(`${BaseUrl}/chapters/get-chapters-by-course_id/${course_id}`, {
@@ -18,7 +18,7 @@ const course_id =async ({params}) => {
     return res.data
   }
   
-  const chaptersData =await getChapter() 
+  const chaptersData =await getChapter()             
   
   return (
       <div>
@@ -32,4 +32,4 @@ const course_id =async ({params}) => {
   )
 }
 
-export default course_id
+export default course_id    
