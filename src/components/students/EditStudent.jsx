@@ -9,27 +9,29 @@ import { uploadImage } from '@/constents/uploadImage'
 import axios from 'axios';
 import { BaseUrl } from '@/constents/serverBaseUrl';
 import { encoder } from '@/constents/encoder'
-import {FiUser, FiMail, FiPhone, FiLock,  FiShield, FiCalendar, FiInfo} from 'react-icons/fi';
+import { FiUser, FiMail, FiPhone, FiLock, FiShield, FiCalendar, FiInfo } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa'; // Using a specific icon for WhatsApp
 import { useRouter } from 'next/navigation'
 
 export default function EditStudent({ studentData }) {
     const router = useRouter()
+    console.log(studentData, "lll");
 
     const [formData, setFormData] = useState({
         name: studentData[0].name || '',
         email: studentData[0].email || '',
         phone: studentData[0].phone || '',
-        isAdmin: studentData[0].is_admin || '',
+        isAdmin: studentData[0].is_admin || 0,
         whatsapp: studentData[0].whatsapp || '',
         gender: studentData[0].gender || '',
         about: studentData[0].about || '',
-        birthday: studentData[0].birthday || null
+        birthday: studentData[0].birthday || ''
     });
     const [passwordData, setPasswordData] = useState({
         password: '',
         confirmPassword: '',
     });
+    console.log(formData, "//");
 
     const [profilePictureFile, setProfilePictureFile] = useState(null);
     const [imagePreviewUrl, setImagePreviewUrl] = useState(''); // For new image previews
@@ -78,10 +80,14 @@ export default function EditStudent({ studentData }) {
         dataToSubmit.append('email', formData.email);
         dataToSubmit.append('phone', formData.phone);
         dataToSubmit.append('is_admin', formData.isAdmin);
-        dataToSubmit.append('whatsapp', formData.whatsapp)
         dataToSubmit.append('gender', formData.gender)
         dataToSubmit.append('about', formData.about)
+        if (formData.whatsapp == '') {
+            dataToSubmit.append('whatsapp', null)
+        } else {
+            dataToSubmit.append('whatsapp', formData.whatsapp)
 
+}
 
         if (formData.birthday) {
             dataToSubmit.append('birthday', formData.birthday)
@@ -111,8 +117,8 @@ export default function EditStudent({ studentData }) {
     };
 
     useEffect(() => {
-        if(!studentData) setLoading(true)
-       
+        if (!studentData) setLoading(true)
+
 
         setExistingImageUrl(studentData[0].media_id ? studentData[0].src : "");
     }, []);
@@ -187,7 +193,7 @@ export default function EditStudent({ studentData }) {
                         <div className="relative"><FaWhatsapp className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" /><input name="whatsapp" type="tel" value={formData.whatsapp} onChange={handleChange} className="w-full pl-10 pr-4 py-2 border rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="WhatsApp Number" /></div>
 
                         {/* Date of Birth */}
-                        <div className="relative"><FiCalendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" /><input name="birthday" type="date" value={formData.dob} onChange={handleChange} className="w-full pl-10 pr-4 py-2 border rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Date of Birth" /></div>
+                        <div className="relative"><FiCalendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" /><input name="birthday" type="date" value={formData.birthday} onChange={handleChange} className="w-full pl-10 pr-4 py-2 border rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Date of Birth" /></div>
 
                         {/* Gender */}
                         <div className="relative"><FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />

@@ -18,7 +18,7 @@ export default function EditInstructor({ InstructorData }) {
         name: InstructorData[0].name || '',
         email: InstructorData[0].email || '',
         phone: InstructorData[0].phone || '',
-        is_featured: InstructorData[0].is_featured || '',
+        is_featured: InstructorData[0].is_featured || 0,
         title: InstructorData[0].title || '',
         gender: InstructorData[0].gender || '',
         about: InstructorData[0].about || '',
