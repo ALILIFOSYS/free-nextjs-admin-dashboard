@@ -22,6 +22,7 @@ const uploadToS3 = async (file, folder, onUploadProgress) => {
     });
 
     const { signedUrl } = await response.data;
+console.log(signedUrl,"signed url");
 
     const uploadResponse = await axios.put(signedUrl, file, {
       headers: {
@@ -29,6 +30,7 @@ const uploadToS3 = async (file, folder, onUploadProgress) => {
       },
       onUploadProgress
     });
+console.log(uploadResponse,"response");
 
    if(uploadResponse.status){
 
