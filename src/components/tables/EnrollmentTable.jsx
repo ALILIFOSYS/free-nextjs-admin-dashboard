@@ -213,7 +213,7 @@ export default function StudentTable({ EnrollmentData, onPageChange, handleActio
                         <button
                           className="p-2 text-blue-600 hover:text-blue-400 dark:text-blue-500 dark:hover:text-blue-300 transition-colors rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20"
                           onClick={() => handleRestore(value.id)}
-                          title="Restore Enrollment"
+                          title="Restore"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"

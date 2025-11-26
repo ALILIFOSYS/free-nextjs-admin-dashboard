@@ -36,7 +36,7 @@ const dashItems: NavItem[] = [
 const coursesItems: NavItem[] = [
   {
     icon: <PieChartIcon />,
-    name: "Coures Management",
+    name: "Course Management",
     subItems: [
       { name: "Category", path: "/category", pro: false },
       { name: "Courses", path: "/courses", pro: false },
