@@ -81,6 +81,7 @@ export default function CreateInstructor() {
 
                 dataToSubmit.append('media_id', uploadResponse);
             }
+console.log(dataToSubmit,"/////");
 
             const { data } = await axios.post(`${BaseUrl}/instructors/create-instructor`, dataToSubmit, {
                 // Let the browser set Content-Type for FormData (multipart/form-data)
