@@ -4,6 +4,7 @@ import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import Button from "@/components/ui/button/Button";
 import { BaseUrl } from "@/constents/serverBaseUrl";
+import { API_KEY } from "@/constents/apiKey";
 import { EyeCloseIcon, EyeIcon } from "@/icons";
 import axios from "axios";
 
@@ -31,7 +32,7 @@ export default function SignInForm() {
     const { data } = await axios.post(`${BaseUrl}/dashboard/login`, Logindata, {
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+        'x-api-key': API_KEY
       }
     })
 

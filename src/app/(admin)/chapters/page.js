@@ -1,6 +1,7 @@
 import PageBreadcrumb from '@/components/common/PageBreadCrumb';
 import ChapterCoursesTable from '@/components/tables/ChapterCourse';
 import { BaseUrl } from '@/constents/serverBaseUrl';
+import { API_KEY } from '@/constents/apiKey';
 import axios from 'axios';
 import React from 'react'
 
@@ -9,7 +10,7 @@ const getCourseDetails = async () => {
       const data = await axios.get(`${BaseUrl}/courses/get-courses`, {
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+          'x-api-key': API_KEY
         }
       });
   

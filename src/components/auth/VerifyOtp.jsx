@@ -5,6 +5,7 @@ import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import axios from "axios";
 import { BaseUrl } from "@/constents/serverBaseUrl";
+import { API_KEY } from '@/constents/apiKey';
 import { useRouter } from "next/navigation";
 // Reusable logo component for consistency
 const ReadyLmsLogo = () => (
@@ -78,7 +79,7 @@ const VerifyOtpPage = ({ email }) => {
         const sendOtp = await axios.post(`${BaseUrl}/dashboard/forgot-password`, { email }, {
             headers: {
                 'Content-Type': 'application/json',
-                'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y',
+                'x-api-key': API_KEY,
 
             }
         })
@@ -99,7 +100,7 @@ const VerifyOtpPage = ({ email }) => {
             const VerifyOtp = await axios.post(`${BaseUrl}/dashboard/verify-otp`, { email, otp: enteredOtp }, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y',
+                    'x-api-key': API_KEY,
 
                 }
             })

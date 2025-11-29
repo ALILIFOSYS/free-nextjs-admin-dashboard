@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {encoder} from '@/constents/encoder'
 import axios from 'axios';
 import { BaseUrl } from '@/constents/serverBaseUrl';
+import { API_KEY } from '@/constents/apiKey';
 export default function ResetPasswordForm() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -41,7 +42,7 @@ export default function ResetPasswordForm() {
             const resetPassword = await axios.post(`${BaseUrl}/dashboard/reset-password`, data, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y',
+                    'x-api-key': API_KEY,
 
                 }
             })

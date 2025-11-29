@@ -11,13 +11,43 @@ import Underline from "@tiptap/extension-underline";
 import { Bold, Italic, Strikethrough, List, ListOrdered, Quote, Code, Undo2, Redo2, Heading1, Heading2, Heading3 } from "lucide-react";
 import Image from "next/image";
 import { AWS_STUDENT_BASE_URL } from "@/constents/URLs";
+import { API_KEY } from '@/constents/apiKey';
 
 
 
 
 export default function EditCourse({ categoryData, instructorData, courseData }) {
   const router = useRouter();
+  console.log(courseData,"courseData");
+  const parseDescription = () => {
+    const rawDescription = courseData?.[0]?.description;
+    if (!rawDescription) return { body: '', heading: '' };
 
+    if (typeof rawDescription === 'string') {
+      try {
+        const parsed = JSON.parse(rawDescription);
+        return {
+          body: parsed?.body || '',
+          heading: parsed?.heading || ''
+        };
+      } catch (error) {
+        console.error('Failed to parse description JSON:', error);
+        return { body: '', heading: '' };
+      }
+    }
+
+    if (typeof rawDescription === 'object') {
+      return {
+        body: rawDescription?.body || '',
+        heading: rawDescription?.heading || ''
+      };
+    }
+
+    return { body: '', heading: '' };
+  };
+
+  const descriptionContent = parseDescription();
+  const instructorOptions = instructorData || [];
   // const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
@@ -30,8 +60,8 @@ export default function EditCourse({ categoryData, instructorData, courseData })
     regularPrice: 0,
     offerPrice: courseData[0].price,
     is_free: courseData[0].is_free,
-    descriptionTitle: courseData[0].description.body,
-    description: courseData[0].description.heading,
+    descriptionTitle: descriptionContent.body,
+    description: descriptionContent.heading,
     is_active: courseData[0].is_active
   });
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -44,15 +74,31 @@ export default function EditCourse({ categoryData, instructorData, courseData })
 
 
 
+  const handleCategoryChange = (e) => {
+    const selectedId = Number(e.target.value);
+    const selectedCategory = categoryData.find(category => category.id === selectedId);
+
+    setFormData(prev => ({
+      ...prev,
+      category_id: selectedCategory ? selectedCategory.id : null,
+      categoryName: selectedCategory ? selectedCategory.title : ''
+    }));
+  };
+
   const handleInputChange = (e) => {
     const { name, value, type } = e.target;
+console.log(name,"dd",value);
 
     if (type === 'checkbox') {
       const checked = (e.target).checked;
       setFormData(prev => ({ ...prev, [name]: checked }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      return;
     }
+
+    const numericFields = ['regularPrice', 'offerPrice'];
+    const nextValue = numericFields.includes(name) ? Number(value) : value;
+
+    setFormData(prev => ({ ...prev, [name]: nextValue }));
   };
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
@@ -163,7 +209,7 @@ export default function EditCourse({ categoryData, instructorData, courseData })
           {
             headers: {
               'Content-Type': 'application/json',
-              'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+              'x-api-key': API_KEY
             }
           }
         );
@@ -172,10 +218,11 @@ export default function EditCourse({ categoryData, instructorData, courseData })
       }
 
 
+ 
       const res = await axios.put(`${BaseUrl}/courses/update-course`, formData, {
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+          'x-api-key': API_KEY
         }
       })
 
@@ -357,8 +404,8 @@ export default function EditCourse({ categoryData, instructorData, courseData })
             </label>
             <input
               type="text"
-              id="title"
-              name="title"
+              id="courseTitle"
+              name="courseTitle"
               value={formData.courseTitle}
               onChange={handleInputChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
@@ -374,8 +421,8 @@ export default function EditCourse({ categoryData, instructorData, courseData })
             <select
               id="category_id"
               name="category_id"
-              value={formData.category_id}
-              onChange={handleInputChange}
+              value={formData.category_id ?? ''}
+              onChange={handleCategoryChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
               required
             >
@@ -468,8 +515,8 @@ export default function EditCourse({ categoryData, instructorData, courseData })
             </label>
             <input
               type="number"
-              id="price"
-              name="price"
+              id="regularPrice"
+              name="regularPrice"
               value={formData.regularPrice}
               onChange={handleInputChange}
               min="0"
@@ -485,8 +532,8 @@ export default function EditCourse({ categoryData, instructorData, courseData })
             </label>
             <input
               type="number"
-              id="price"
-              name="price"
+              id="offerPrice"
+              name="offerPrice"
               value={formData.offerPrice}
               onChange={handleInputChange}
               min="0"

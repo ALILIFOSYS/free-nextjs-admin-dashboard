@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import InstructorTable from '@/components/tables/InstructorTable'
 import axios from 'axios';
 import { BaseUrl } from '@/constents/serverBaseUrl';
+import { API_KEY } from '@/constents/apiKey';
 import { useSearchParams } from 'next/navigation';
 const ShowInstructors = () => {
 
@@ -21,7 +22,7 @@ const ShowInstructors = () => {
       headers: {
         'Cache-Control': 'no-store',
         'Content-Type': 'application/json',
-        'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+        'x-api-key': API_KEY
       }
     })
 
@@ -39,7 +40,7 @@ const ShowInstructors = () => {
     const data = await axios.get(`${BaseUrl}/students/get-all-students?page=${page}`, {
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+        'x-api-key': API_KEY
       }
     })
     setPagination(false)
@@ -52,7 +53,7 @@ const ShowInstructors = () => {
       headers: {
         'Cache-Control': 'no-store',
         'Content-Type': 'application/json',
-        'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+        'x-api-key': API_KEY
       }
     })
 

@@ -5,6 +5,7 @@ import Image from "next/image";
 import axios from "axios";
 import { BaseUrl } from "@/constents/serverBaseUrl";
 import { AWS_STUDENT_BASE_URL } from "@/constents/URLs";
+import { API_KEY } from '@/constents/apiKey';
 
 
 interface Admin {
@@ -21,7 +22,7 @@ export default function UserMetaCard() {
     const data = await axios.post(`${BaseUrl}/admin/get-admin`, { email }, {
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+        'x-api-key': API_KEY
       }
     })
     // console.log(data, "aa");

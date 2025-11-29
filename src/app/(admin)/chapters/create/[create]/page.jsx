@@ -1,5 +1,6 @@
 import PageBreadcrumb from '@/components/common/PageBreadCrumb';
 import { BaseUrl } from '@/constents/serverBaseUrl';
+import { API_KEY } from '@/constents/apiKey';
 import CreateChapters from '@/components/chapters/CreateChapter'
 import axios from 'axios';
 const page = async ({ params, searchParams }) => {
@@ -10,7 +11,7 @@ const page = async ({ params, searchParams }) => {
         const LastNumber = await axios.get(`${BaseUrl}/chapters/get-lastserialnumber-by-course-id/${course_id}`, {
             headers: {
                 'Content-Type': 'application/json',
-                'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+                'x-api-key': API_KEY
             }
         })
         if (LastNumber.data.status) {

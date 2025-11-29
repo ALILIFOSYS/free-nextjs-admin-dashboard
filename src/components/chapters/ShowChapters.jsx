@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { BaseUrl } from '@/constents/serverBaseUrl';
 import axios from 'axios';
 import { AWS_STUDENT_BASE_URL } from '@/constents/URLs';
+import { API_KEY } from '@/constents/apiKey';
 // UPDATED: Changed imports to use a CDN to resolve module loading errors
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -84,7 +85,7 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
         const deleteChapter = await axios.delete(`${BaseUrl}/chapters/delete-chapter/${chapter_id}`, {
           headers: {
             'Content-Type': 'application/json',
-            'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+            'x-api-key': API_KEY
           }
         });
         if (deleteChapter.data.status) {
@@ -115,7 +116,7 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
       const data = await axios.put(`${BaseUrl}/chapters/update-chapter/${chapterId}`, editChapterForm, {
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+          'x-api-key': API_KEY
         }
       })
 
@@ -140,7 +141,7 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
         const deleteContent = await axios.delete(`${BaseUrl}/chapters/delete-content/${content_id}`, {
           headers: {
             'Content-Type': 'application/json',
-            'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+            'x-api-key': API_KEY
           }
         });
         if (deleteContent.data.status) {
@@ -258,7 +259,7 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
       const { data } = await axios.put(`${BaseUrl}/chapters/update-content/${contentId}`, requestData, {
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+          'x-api-key': API_KEY
         }
       });
       

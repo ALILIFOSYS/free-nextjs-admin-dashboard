@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import VerifyOtp from '@/components/auth/VerifyOtp'
 import { BaseUrl } from "@/constents/serverBaseUrl";
+import { API_KEY } from '@/constents/apiKey';
 import axios from "axios";
 // A simple placeholder for the logo component
 const ReadyLmsLogo = () => (
@@ -43,7 +44,7 @@ const ForgotPasswordPage = () => {
       const sendOtp = await axios.post(`${BaseUrl}/dashboard/forgot-password`, { email }, {
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y',
+          'x-api-key': API_KEY,
   
         }
       })

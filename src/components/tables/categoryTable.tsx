@@ -14,6 +14,7 @@ import { PencilIcon, TrashBinIcon } from "@/icons";
 import CreateCategory from "../courses/CreateCatergory";
 import axios from "axios";
 import { BaseUrl } from "@/constents/serverBaseUrl";
+import { API_KEY } from '@/constents/apiKey';
 import EditCategory from "./EditCategory";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -79,7 +80,7 @@ export default function CategoryTable({ getCategoryData }: { getCategoryData: Ca
                 {
                     headers: {
                         'Content-Type': 'application/json',
-                        'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+                        'x-api-key': API_KEY
                     }
                 }        
             );
@@ -98,7 +99,7 @@ export default function CategoryTable({ getCategoryData }: { getCategoryData: Ca
                 // You can show a confirmation dialog or perform the deletion here
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+                    'x-api-key': API_KEY
                 }  
             });
             if (deleteCategory.data.status) {

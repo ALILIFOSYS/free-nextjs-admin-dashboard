@@ -5,6 +5,7 @@ import axios from 'axios';
 import { BaseUrl } from '@/constents/serverBaseUrl';
 import Image from 'next/image';
 import { AWS_STUDENT_BASE_URL } from '@/constents/URLs'
+import { API_KEY } from '@/constents/apiKey';
 import { uploadImage } from '@/constents/uploadImage';
 const ShowCertificate = ({ courses }) => {
 
@@ -132,7 +133,7 @@ const data = courses.filter((value=> value.deleted_at ==null))
                     data: { course_id: selectedCourse },
                     headers: {
                         'Content-Type': 'application/json',
-                        'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+                        'x-api-key': API_KEY
                     }
                 }
             );
@@ -172,7 +173,7 @@ const data = courses.filter((value=> value.deleted_at ==null))
                 {
                     headers: {
                         'Content-Type': 'application/json',
-                        'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+                        'x-api-key': API_KEY
                     }
                 }
             );
@@ -211,7 +212,7 @@ const data = courses.filter((value=> value.deleted_at ==null))
             const { data } = await axios.post(`${BaseUrl}/certificates/get-certificates`, Details, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+                    'x-api-key': API_KEY
                 }
             })
             if (data.data && data.data.length > 0) {

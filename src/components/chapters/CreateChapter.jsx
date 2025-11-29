@@ -7,6 +7,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Link from '@tiptap/extension-link';
 import { BaseUrl } from '@/constents/serverBaseUrl';
+import { API_KEY } from '@/constents/apiKey';
 import axios from 'axios'
 import { uploadImage } from '@/constents/uploadImage'
 import { useSearchParams } from 'next/navigation'
@@ -241,7 +242,7 @@ export default function CreateChapters({ course_id, data }) {
             const response = await axios.post(`${BaseUrl}/chapters/create-chapter/${course_id}`, formData, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+                    'x-api-key': API_KEY
                 }
             });
 

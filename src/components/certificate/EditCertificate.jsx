@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import axios from 'axios'
 import { BaseUrl } from '@/constents/serverBaseUrl'
+import { API_KEY } from '@/constents/apiKey';
 import Image from 'next/image'
 
 const EditCertificate = () => {
@@ -44,7 +45,7 @@ const EditCertificate = () => {
                 setFetching(true)
                 const { data } = await axios.get(`${BaseUrl}/certificates/${certificateId}`, {
                     headers: {
-                        'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+                        'x-api-key': API_KEY
                     }
                 })
                 
@@ -141,7 +142,7 @@ const EditCertificate = () => {
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+                        'x-api-key': API_KEY
                     }
                 }
             )

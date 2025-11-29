@@ -4,6 +4,7 @@ import { useState, useRef, useCallback } from 'react';
 import { Upload, Image, FileText, Settings, Download, X, ChevronDown, Check } from 'lucide-react';
 import { uploadImage } from '@/constents/uploadImage'
 import { BaseUrl } from '@/constents/serverBaseUrl';
+import { API_KEY } from '@/constents/apiKey';
 import axios from 'axios';
 export default function CertificateConfigurator({ courses = [] }) {
     const [certificateData, setCertificateData] = useState({
@@ -191,7 +192,7 @@ export default function CertificateConfigurator({ courses = [] }) {
             const response = await axios.post(`${BaseUrl}/certificates/create-certificate`,certificateData , {
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+                    'x-api-key': API_KEY
 
                 }
             });

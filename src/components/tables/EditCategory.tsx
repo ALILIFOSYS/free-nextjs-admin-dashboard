@@ -4,6 +4,7 @@ import { useState, useRef, ChangeEvent, useEffect } from 'react';
 import Image from 'next/image';
 import axios from 'axios';
 import { BaseUrl } from '@/constents/serverBaseUrl';
+import { API_KEY } from '@/constents/apiKey';
 import { useRouter } from 'next/navigation';
 type Category = {
   id: number;
@@ -118,7 +119,7 @@ export default function EditCategory({ category, CloseModal }: CategoryTableProp
             {
               headers: {
                 'Content-Type': 'application/json',
-                'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+                'x-api-key': API_KEY
               }
             }   
           );
@@ -140,7 +141,7 @@ export default function EditCategory({ category, CloseModal }: CategoryTableProp
        await axios.put(`${BaseUrl}/courses/update-category`, formData, {
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+          'x-api-key': API_KEY
         }
       });
       // console.log(updateCategory);

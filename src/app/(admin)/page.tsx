@@ -55,7 +55,7 @@ export default async function Ecommerce() {
     </div>
       <div className="col-span-6 ">
       <div className="">
-        <ComponentCard title="Top Students">
+        <ComponentCard title="Top Instructors">
           <TopInstructorsTable instructors={dashboardData.topInstructors} />
         </ComponentCard>
       </div>

@@ -8,6 +8,7 @@ import Underline from "@tiptap/extension-underline";
 import { Bold, Italic, Strikethrough, List, ListOrdered, Quote, Code, Undo2, Redo2, Heading1, Heading2, Heading3, Link as LinkIcon } from "lucide-react";
 import axios from 'axios';
 import { BaseUrl } from '@/constents/serverBaseUrl';
+import { API_KEY } from '@/constents/apiKey';
 import Image from 'next/image';
 
 // Define TypeScript interfaces
@@ -59,18 +60,22 @@ const CourseCreationForm = ({ categoryData, instructorData }: { categoryData: Ca
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [thumbnail, setThumbnail] = useState<string>('')
   // Handle form input changes
+  console.log(formData.categoryName,"cate");
   
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedId = Number(e.target.value);
+    const selectedCategory = categoryOptions.find(category => category.id === selectedId);
 
-    if (name == 'categoryName') {
-      setFormData(prev => ({
-        ...prev,
-        category_id: categoryOptions[parseInt(value)].id,
-        categoryName: categoryOptions[parseInt(value)].title
-      }))
-      return
-    }
+    setFormData(prev => ({
+      ...prev,
+      category_id: selectedCategory ? selectedCategory.id : null,
+      categoryName: selectedCategory ? selectedCategory.title : ''
+    }));
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+console.log(name,value,"dd");
 
     if (type === 'checkbox' && 'checked' in e.target) {
       const checked = (e.target as HTMLInputElement).checked;
@@ -236,7 +241,7 @@ const CourseCreationForm = ({ categoryData, instructorData }: { categoryData: Ca
         {
           headers: {
             'Content-Type': 'application/json',
-            'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+            'x-api-key': API_KEY
           }
         }
       );
@@ -247,7 +252,7 @@ const CourseCreationForm = ({ categoryData, instructorData }: { categoryData: Ca
        await axios.post(`${BaseUrl}/courses/create-course`, formData, {
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+          'x-api-key': API_KEY
         }
       })
     
@@ -406,14 +411,14 @@ editor?.commands.clearContent()
               Category
             </label>
             <select
-              name="categoryName"
-              value={formData.categoryName}
-              onChange={handleInputChange}
+              name="category_id"
+              value={formData.category_id ?? ''}
+              onChange={handleCategoryChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select a category</option>
-              {categoryOptions.map((category,index) => (
-                <option key={index} value={index}>
+              {categoryOptions.map((category) => (
+                <option key={category.id} value={category.id}>
                   {category.title}
                 </option>
               )

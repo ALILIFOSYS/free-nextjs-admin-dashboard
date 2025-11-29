@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { BaseUrl } from "@/constents/serverBaseUrl";
 import { AWS_STUDENT_BASE_URL } from "@/constents/URLs";
+import { API_KEY } from '@/constents/apiKey';
 // import { useModal } from "@/hooks/useModal";
 
 
@@ -53,7 +54,7 @@ export default function CoursesTable({ data }: { data: Course[] }) {
         {
           headers: {
             'Content-Type': 'application/json',
-            'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+            'x-api-key': API_KEY
           }
         }
       );
@@ -75,7 +76,7 @@ export default function CoursesTable({ data }: { data: Course[] }) {
         // You can show a confirmation dialog or perform the deletion here
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+          'x-api-key': API_KEY
         }
       });
 
@@ -229,7 +230,7 @@ export default function CoursesTable({ data }: { data: Course[] }) {
                         <button
                           className="p-2 text-blue-600 hover:text-blue-400 dark:text-blue-500 dark:hover:text-blue-300 transition-colors rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20"
                           onClick={() => handleRestore(value.id)}
-                          title="Restore Enrollment"
+                          title="Restore"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"

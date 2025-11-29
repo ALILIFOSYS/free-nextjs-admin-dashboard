@@ -3,6 +3,7 @@
 import { useState, useRef, ChangeEvent } from 'react';
 import Image from 'next/image';
 import { BaseUrl } from '@/constents/serverBaseUrl';
+import { API_KEY } from '@/constents/apiKey';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
@@ -89,7 +90,7 @@ export default function CreateCategory({ CloseModal }: { CloseModal: () => void 
                 {
                     headers: {
                         'Content-Type': 'application/json',
-                        'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+                        'x-api-key': API_KEY
                     }
                 }
             );
@@ -103,7 +104,7 @@ export default function CreateCategory({ CloseModal }: { CloseModal: () => void 
             const createCategory = await axios.post(`${BaseUrl}/courses/create-category`, CategoryData, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+                    'x-api-key': API_KEY
                 }
             });
             if (createCategory) {

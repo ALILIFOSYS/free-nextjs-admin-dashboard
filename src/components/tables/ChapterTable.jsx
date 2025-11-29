@@ -14,6 +14,7 @@ import { PencilIcon, ResetIcon, TrashBinIcon } from "@/icons";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { BaseUrl } from "@/constents/serverBaseUrl";
+import { API_KEY } from '@/constents/apiKey';
 import { Modal } from "../ui/modal";
 import { useModal } from "@/hooks/useModal";
 import ConfirmModal from '@/components/ui/modal/Confirmation'
@@ -50,7 +51,7 @@ export default function ChapterTable({ data, course_id }) {
             {
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+                    'x-api-key': API_KEY
                 }
             }
         )

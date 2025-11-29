@@ -1,5 +1,6 @@
 import CreateCourse from '@/components/courses/CreateCourse'
 import { BaseUrl } from '@/constents/serverBaseUrl'
+import { API_KEY } from '@/constents/apiKey';
 import axios from 'axios'
 const page = async () => {
 
@@ -10,7 +11,7 @@ const page = async () => {
     const res = await axios.get(`${BaseUrl}/instructors/get-instructors`, {
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+        'x-api-key': API_KEY
       }
     });
     return res.data.data
@@ -19,7 +20,7 @@ const page = async () => {
     const res = await axios.get(`${BaseUrl}/courses/get-category`, {
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+        'x-api-key': API_KEY
       }
     });
     return res.data

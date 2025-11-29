@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { FiUser, FiMail, FiPhone, FiLock, FiImage, FiShield, FiUploadCloud } from 'react-icons/fi';
 import { uploadImage } from '@/constents/uploadImage'
 import { encoder } from '@/constents/encoder'
+import { API_KEY } from '@/constents/apiKey';
 import axios from 'axios';
 import { useRouter } from 'next/navigation'
 
@@ -75,7 +76,7 @@ export default function CreateStudent() {
       const { data } = await axios.post(`${BaseUrl}/students/create-student`, dataToSubmit, {
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+          'x-api-key': API_KEY
         }
       })
       router.push('/students')

@@ -9,6 +9,7 @@ import { uploadImage } from '@/constents/uploadImage'
 import axios from 'axios';
 import { BaseUrl } from '@/constents/serverBaseUrl';
 import { encoder } from '@/constents/encoder'
+import { API_KEY } from '@/constents/apiKey';
 import { FiUser, FiMail, FiPhone, FiLock, FiShield, FiCalendar, FiInfo } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa'; // Using a specific icon for WhatsApp
 import { useRouter } from 'next/navigation'
@@ -107,7 +108,7 @@ export default function EditStudent({ studentData }) {
         const { data } = await axios.put(`${BaseUrl}/students/update-student/${studentData[0].id}`, dataToSubmit, {
             headers: {
                 'Content-Type': 'application/json',
-                'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+                'x-api-key': API_KEY
             }
         })
 

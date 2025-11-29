@@ -17,6 +17,7 @@ import { BaseUrl } from "@/constents/serverBaseUrl";
 import ConfirmModal from '@/components/ui/modal/Confirmation'
 import Pagination from "./Pagination";
 import { AWS_STUDENT_BASE_URL } from "@/constents/URLs";
+import { API_KEY } from '@/constents/apiKey';
 export default function StudentTable({ studentData, onPageChange, handleAction }) {
 // console.log(studentData,"//");
 
@@ -50,7 +51,7 @@ export default function StudentTable({ studentData, onPageChange, handleAction }
       {
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+          'x-api-key': API_KEY
         }
       }
     )
@@ -188,7 +189,7 @@ export default function StudentTable({ studentData, onPageChange, handleAction }
                         <button  
                           className="p-2 text-blue-600 hover:text-blue-400 dark:text-blue-500 dark:hover:text-blue-300 transition-colors rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20"
                           // onClick={() => handleRestore(value.id)}
-                          title="Restore Enrollment"
+                          title="Restore"
                         >   
                           <svg
                             xmlns="http://www.w3.org/2000/svg"

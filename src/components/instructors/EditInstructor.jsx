@@ -8,6 +8,7 @@ import { uploadImage } from '@/constents/uploadImage'
 import axios from 'axios';
 import { BaseUrl } from '@/constents/serverBaseUrl';
 import { encoder } from '@/constents/encoder'
+import { API_KEY } from '@/constents/apiKey';
 import { FiUser, FiMail, FiPhone, FiLock, FiShield, FiInfo } from 'react-icons/fi';
 import { useRouter } from 'next/navigation'
 
@@ -100,7 +101,7 @@ export default function EditInstructor({ InstructorData }) {
         const { data } = await axios.put(`${BaseUrl}/instructors/update-instructor/${InstructorData[0].id}`, dataToSubmit, {
             headers: {
                 'Content-Type': 'application/json',
-                'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+                'x-api-key': API_KEY
             }
         }) 
 if(data.status){
@@ -222,7 +223,7 @@ if(data.status){
 
                     <div className='flex justify-center mt-10'>
                         <button type="submit" className="w-50 flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-offset-gray-800 transition-colors duration-300">
-                            Update Student
+                            Update Instructor
                         </button>
                     </div>
                 </form>

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { BaseUrl } from "./serverBaseUrl";
+import { API_KEY } from "./apiKey";
 
 const uploadToS3 = async (file, folder, onUploadProgress) => {
 
@@ -57,7 +58,7 @@ export const uploadImage = async (file, folder, onUploadProgress) => {
         {
           headers: {
             'Content-Type': 'application/json',
-            'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+            'x-api-key': API_KEY
           }
         }
       );

@@ -64,6 +64,41 @@ git clone https://github.com/TailAdmin/free-nextjs-admin-dashboard.git
     yarn dev
     ```
 
+## Environment Variables
+
+### Setup
+
+1. Copy the example environment file:
+    ```bash
+    cp .env.example .env
+    ```
+
+2. Fill in your environment variables in the `.env` file:
+    ```env
+    # AWS S3 Configuration
+    AWS_REGION=ap-south-1
+    AWS_ACCESS_KEY_ID=your_aws_access_key_id
+    AWS_SECRET_ACCESS_KEY=your_aws_secret_access_key
+    AWS_S3_BUCKET_NAME=trailcourses
+
+    # API Key for Server Authentication
+    NEXT_PUBLIC_API_KEY=your_api_key_here
+    ```
+
+### API Key Refactor
+
+**Refactored:** All hardcoded API keys have been moved to environment variables for better security and maintainability.
+
+- **Before:** API keys were hardcoded in multiple component files
+- **After:** API keys are centralized in `src/constents/apiKey.js` and loaded from `NEXT_PUBLIC_API_KEY` environment variable
+- **Benefits:**
+  - Centralized configuration
+  - Easy to update without code changes
+  - Better security practices
+  - Environment-specific keys (dev, staging, production)
+
+All API requests now use the `API_KEY` constant imported from `@/constents/apiKey`, which reads from the `NEXT_PUBLIC_API_KEY` environment variable.
+
 ## Components
 
 TailAdmin is a pre-designed starting point for building a web-based dashboard using Next.js and Tailwind CSS. The template includes:

@@ -2,6 +2,7 @@ import React from 'react'
 import EditCourse from '@/components/courses/EditCourses'
 import axios from 'axios';
 import { BaseUrl } from '@/constents/serverBaseUrl';
+import { API_KEY } from '@/constents/apiKey';
 const EditCourseById = async ({ params }) => {
   const { id } =await params
 
@@ -14,7 +15,7 @@ let categoryData=[]
       const response = await axios.get(`${BaseUrl}/courses/get-course/${id}`, {
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+          'x-api-key': API_KEY
         }
       })
         return response.data;
@@ -24,7 +25,7 @@ let categoryData=[]
     const res = await axios.get(`${BaseUrl}/instructors/get-instructors`, {
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+        'x-api-key': API_KEY
       }
     });
     return res.data
@@ -33,7 +34,7 @@ let categoryData=[]
     const res = await axios.get(`${BaseUrl}/courses/get-category`, {
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+        'x-api-key': API_KEY
       }
     });
     return res.data

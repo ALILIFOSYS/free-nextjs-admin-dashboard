@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { FiUser, FiMail, FiPhone, FiLock, FiImage, FiShield,FiInfo } from 'react-icons/fi';
 import { uploadImage } from '@/constents/uploadImage'
 import { encoder } from '@/constents/encoder'
+import { API_KEY } from '@/constents/apiKey';
 import axios from 'axios';
 import { useRouter } from 'next/navigation'
 
@@ -84,7 +85,7 @@ export default function CreateInstructor() {
             const { data } = await axios.post(`${BaseUrl}/instructors/create-instructor`, dataToSubmit, {
                 // Let the browser set Content-Type for FormData (multipart/form-data)
                 headers: {
-                    'x-api-key': 'QWlpbGFicyBhcGkga2V5IGF0IGN5YmVyIHBhcmsgNHRoIGZsb29y'
+                    'x-api-key': API_KEY
                 }
             })
             if (data.status) {
