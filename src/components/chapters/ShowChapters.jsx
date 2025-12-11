@@ -14,7 +14,6 @@ import Link from '@tiptap/extension-link';
 import { uploadImage } from '@/constents/uploadImage';
 
 const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDelete, onContentEdit }) => {
-  
   const [expandedChapters, setExpandedChapters] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
   const [contentFilter, setContentFilter] = useState('all');
@@ -88,8 +87,12 @@ const CourseDetails = ({ courseData, onChapterDelete, onChapterEdit, onContentDe
             'x-api-key': API_KEY
           }
         });
-        if (deleteChapter.data.status) {
+        console.log(deleteChapter,";;;;;");
+        
+        if (deleteChapter.data.success) {
           // Success handling
+          
+window.location.reload();
         }
         if (onChapterDelete) {
           await onChapterDelete(chapter_id);

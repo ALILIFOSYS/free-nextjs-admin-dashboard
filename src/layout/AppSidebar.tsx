@@ -88,7 +88,7 @@ const generalSettings : NavItem[]=[
      name: "Settings Management",
     subItems: [
       { name: "General Settings", path: "/settings", pro: false },
-      { name: "Certificate Configaration", path: "/certificates", pro: false },
+      { name: "Certificate Management", path: "/certificates", pro: false },
     ],
   }
 ]

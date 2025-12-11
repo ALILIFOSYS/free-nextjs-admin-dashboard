@@ -145,19 +145,19 @@ export default function EditStudent({ studentData }) {
                             Profile Picture
                         </label>
                         <div className="relative w-32 h-32">
-                            {studentData[0].media_id &&
+                            {imagePreviewUrl ? (
+                                <img
+                                    src={imagePreviewUrl}
+                                    alt="Profile Preview"
+                                    className="w-full h-full rounded-full object-cover border-4 border-gray-200 dark:border-gray-600"
+                                />
+                            ) : studentData[0].media_id ? (
                                 <img
                                     src={`${AWS_STUDENT_BASE_URL}${existingImageUrl}`}
                                     alt="Profile Preview"
                                     className="w-full h-full rounded-full object-cover border-4 border-gray-200 dark:border-gray-600"
                                 />
-                            }
-                            {imagePreviewUrl &&
-                                <img
-                                    src={imagePreviewUrl}
-                                    alt="Profile Preview"
-                                    className="w-full h-full rounded-full object-cover border-4 border-gray-200 dark:border-gray-600"
-                                />}
+                            ) : null}
                             <label htmlFor="profilePicture" className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white text-xs font-bold rounded-full opacity-10 hover:opacity-100 transition-opacity cursor-pointer">
                                 Change
                             </label>

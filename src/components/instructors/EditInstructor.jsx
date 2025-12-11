@@ -104,6 +104,8 @@ export default function EditInstructor({ InstructorData }) {
                 'x-api-key': API_KEY
             }
         }) 
+        console.log(data,"//");
+        
 if(data.status){
 
     router.push('/instructors')
