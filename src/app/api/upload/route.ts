@@ -14,12 +14,13 @@ export async function POST(request: Request) {
     });
 
     const signedUrl = await getSignedUrl(s3Client, command, { expiresIn: 60 });
+console.log(signedUrl,"signedUrl");
 
     return NextResponse.json({ signedUrl });
   } catch (error) {
     console.error('Error generating signed URL:', error);
     return NextResponse.json(
-      { message: 'Error generating signed URL' },
+      { message: 'Error generating signed URL' ,bucketName:process.env.AW_S3_BUCKET_NAME,id: process.env.AW_ACCESS_KEY_ID, key:process.env.AW_SECRET_ACCESS_KEY,region:process.env.AW_REGION},
       { status: 500 }
     );
   }
