@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     const { data } = await request.json();
     const { fileName, fileType } = data;
     const command = new PutObjectCommand({
-      Bucket: process.env.AWS_S3_BUCKET_NAME,
+      Bucket: process.env.AW_S3_BUCKET_NAME,
       Key: fileName,
       ContentType: fileType,// Optional: Set ACL to public-read if you want the file to be publicly accessible
       ACL: 'public-read'
