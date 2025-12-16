@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     const { data } = await request.json();
     const { fileName, fileType } = data;
     const command = new PutObjectCommand({
-      Bucket: process.env.AW_S3_BUCKET_NAME,
+      Bucket: process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME,
       Key: fileName,
       ContentType: fileType,// Optional: Set ACL to public-read if you want the file to be publicly accessible
       ACL: 'public-read'
@@ -20,7 +20,7 @@ console.log(signedUrl,"signedUrl");
   } catch (error) {
     console.error('Error generating signed URL:', error);
     return NextResponse.json(
-      { message: 'Error generating signed URL' ,bucketName:process.env.AW_S3_BUCKET_NAME,id: process.env.AW_ACCESS_KEY_ID, key:process.env.AW_SECRET_ACCESS_KEY,region:process.env.AW_REGION},
+      { message: 'Error generating signed URL' ,bucketName:process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME,id: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID, key:process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY,region:process.env.NEXT_PUBLIC_AWS_REGION},
       { status: 500 }
     );
   }
